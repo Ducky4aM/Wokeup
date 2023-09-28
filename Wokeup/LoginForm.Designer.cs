@@ -39,7 +39,7 @@
             // btnLogin
             // 
             btnLogin.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btnLogin.Location = new Point(156, 224);
+            btnLogin.Location = new Point(156, 208);
             btnLogin.Name = "btnLogin";
             btnLogin.Size = new Size(100, 35);
             btnLogin.TabIndex = 0;
@@ -60,6 +60,7 @@
             txbPassword.Name = "txbPassword";
             txbPassword.Size = new Size(180, 23);
             txbPassword.TabIndex = 2;
+            txbPassword.UseSystemPasswordChar = true;
             // 
             // lblUserName
             // 

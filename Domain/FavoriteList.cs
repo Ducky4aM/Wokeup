@@ -12,18 +12,18 @@ namespace Domain
 
         public User user { get; private set; }
 
-        public List<Song> songs { get; private set; }
+        public List<Song> songCollection { get; private set; }
 
         public FavoriteList(string name, User owner)
         {
             this.name = name;
             this.user = owner;
-            this.songs = new List<Song>();
+            this.songCollection = new List<Song>();
         }
 
         public bool AddSongToFavoriteList(Song song)
         {
-            this.songs.Add(song);
+            this.songCollection.Add(song);
 
             return true;
         }

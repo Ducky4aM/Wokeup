@@ -21,6 +21,12 @@ namespace Wokeup
             username = txbUsername.Text;
             password = txbPassword.Text;
 
+            if (username == "duc" && password == "123")
+            {
+                MessageBox.Show("login");
+            }
+
+            MessageBox.Show("not correct");
         }
     }
 }

@@ -1,0 +1,45 @@
+version: '3.8'
+services:
+  mysql:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DUCS_DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DUCS_DB_DATABASE}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - mysql_log:/var/log/mysql
+    networks:
+      - duc-cool-app
+
+  #php admin
+  phpmyadmin:
+    image: phpmyadmin:5.2
+    security_opt:
+      - no-new-privileges:true
+    environment:
+      PMA_HOST: mysql
+      PMA_PORT: 3306
+      PMA_USER: root
+      PMA_PASSWORD: ${DUCS_DB_ROOT_PASSWORD}
+      PHP_UPLOAD_MAX_FILESIZE: 200MB
+      UPLOAD_LIMIT: 1G
+    ports:
+      - "8888:80"
+    volumes:
+      - phpmyadmin:/sessions
+    networks:
+      - duc-cool-app
+
+volumes:
+  mysql_data:
+    driver: local
+  mysql_log:
+    driver: local
+  phpmyadmin:
+    driver: local
+
+networks:
+  duc-cool-app:
+    driver: bridge
