@@ -3,8 +3,8 @@ services:
   mysql:
     image: mysql:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: ${DUCS_DB_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${DUCS_DB_DATABASE}
+      MYSQL_ROOT_PASSWORD: ${DUC_DB_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${DUC_DB_DATABASE}
     ports:
       - "3306:3306"
     volumes:
@@ -22,7 +22,7 @@ services:
       PMA_HOST: mysql
       PMA_PORT: 3306
       PMA_USER: root
-      PMA_PASSWORD: ${DUCS_DB_ROOT_PASSWORD}
+      PMA_PASSWORD: ${DUC_DB_ROOT_PASSWORD}
       PHP_UPLOAD_MAX_FILESIZE: 200MB
       UPLOAD_LIMIT: 1G
     ports:
