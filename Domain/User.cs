@@ -14,19 +14,18 @@ namespace Domain
 
         private List<FavoriteList> favoriteListCollecttion;
 
-
         public User(string name, string password)
         {
             this.name = name;
             this.password = password;
         }
 
-        public List<FavoriteList> GetUserFavoriteListCollection ()
+        public List<FavoriteList> GetFavoriteListCollection ()
         {
             return this.favoriteListCollecttion;
         }
 
-        public bool createNewFavoriteList(string name)
+        public bool CreateNewFavoriteList(string name)
         {
             FavoriteList newList =  new FavoriteList(name,this);
 

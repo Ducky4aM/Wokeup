@@ -4,13 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain
+namespace Infrastructure.DTO
 {
-    public enum GenreType
+    internal class FavoriteListDTO
     {
-        Pop,
-        Dance,
-        Rap,
-        Hihop,
     }
 }

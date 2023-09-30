@@ -7,6 +7,10 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domain", "Domain\Domain.csp
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Wokeup", "Wokeup\Wokeup.csproj", "{B4F80D25-FAA3-40A7-83CB-73679CC04FFF}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Shared", "Shared\Shared.csproj", "{867EFDBF-EF5B-4BFD-B268-1FD36923539F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Infrastructure", "Infrastructure\Infrastructure.csproj", "{CF2F663A-358B-4EC2-80BE-B0C96A6B79C5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +25,14 @@ Global
 		{B4F80D25-FAA3-40A7-83CB-73679CC04FFF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B4F80D25-FAA3-40A7-83CB-73679CC04FFF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B4F80D25-FAA3-40A7-83CB-73679CC04FFF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{867EFDBF-EF5B-4BFD-B268-1FD36923539F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{867EFDBF-EF5B-4BFD-B268-1FD36923539F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{867EFDBF-EF5B-4BFD-B268-1FD36923539F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{867EFDBF-EF5B-4BFD-B268-1FD36923539F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CF2F663A-358B-4EC2-80BE-B0C96A6B79C5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CF2F663A-358B-4EC2-80BE-B0C96A6B79C5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CF2F663A-358B-4EC2-80BE-B0C96A6B79C5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CF2F663A-358B-4EC2-80BE-B0C96A6B79C5}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
