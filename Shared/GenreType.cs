@@ -5,6 +5,6 @@
         Pop,
         Dance,
         Rap,
-        Hihop,
+        Hiphop,
     }
 }

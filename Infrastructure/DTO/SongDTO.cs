@@ -6,7 +6,18 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.DTO
 {
-    internal class SongDTO
+    public class SongDTO
     {
+        public int songId { get; private set; }
+        public string songName { get; private set; }
+        public string songImage { get; private set; }
+        public int songListened { get; private set; }
+       
+        public SongDTO(int songid , string songName, string songImage, int songListened) {
+            this.songId = songid;
+            this.songName = songName;
+            this.songImage = songImage;
+            this.songListened = songListened;
+        }
     }
 }

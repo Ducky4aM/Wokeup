@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.DTO
 {
-    internal class UserDTO
+    public class UserDTO
     {
+        public string username { get; private set; }
+
+        public UserDTO(string userName) { 
+            this.username = userName;
+        }
     }
 }

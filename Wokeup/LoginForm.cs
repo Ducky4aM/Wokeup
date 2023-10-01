@@ -1,4 +1,6 @@
+using Infrastructure;
 using Infrastructure.DbConnect;
+using Infrastructure.DTO;
 using MySql.Data.MySqlClient;
 
 namespace Wokeup
@@ -15,30 +17,32 @@ namespace Wokeup
 
         }
 
+        private void OpenMainForm()
+        {
+            this.Hide();
+            MainForm mainForm = new MainForm();
+            mainForm.TopMost = true;
+            mainForm.ShowDialog();
+            mainForm.Focus();
+        }
+
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            string connectionString = "Server=localhost;Port=3306;Database=wokeup;Uid=root;Pwd=password;";
+            //UserDTO user = UserRepository.AuthUser(txbUsername.Text.ToLower(), txbPassword.Text);
 
-            try
-            {
-                Connection.connOpen();
+            //if (user == null)
+            //{
+            //    MessageBox.Show("Login failed. Invalid username or password.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+            //}
 
-                string sql = "SELECT * FROM user";
-                MySqlCommand cmd = new MySqlCommand(sql, Connection.DbConnect());
+            //if (user != null)
+            //{
+            //    MessageBox.Show($"Welcome {txbUsername.Text}", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                using (MySqlDataReader reader = cmd.ExecuteReader())
-                {
-                    while (reader.Read())
-                    {
-                        MessageBox.Show(reader["username"].ToString());
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                MessageBox.Show("error");
-                MessageBox.Show(ex.Message);
-            }
+            //    this.OpenMainForm();
+            //}
+
+            this.OpenMainForm();
         }
     }
 }
