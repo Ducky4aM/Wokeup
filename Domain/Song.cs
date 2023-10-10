@@ -12,16 +12,25 @@ namespace Domain
 
         public int listened { get; private set; }
 
+        public string image { get; private set; }
+
         public Genre genre { get; private set; }
 
         public Artist artist { get; private set; }
 
-        public Song(string name, Artist artist, Genre genre, int listened)
+        public Song(string name, string image, int listened)
         {
             this.name= name;
-            this.artist = artist;
-            this.genre = genre;
+            this.image = image;
             this.listened = listened;
+            //this.artist = artist;
+            //this.genre = genre;
         }
+
+        public override string ToString()
+        {
+            return this.name;
+        }
+
     }
 }

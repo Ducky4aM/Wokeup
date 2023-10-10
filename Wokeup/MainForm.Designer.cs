@@ -30,59 +30,69 @@
         {
             tbcMain = new TabControl();
             tbpSonglist = new TabPage();
-            listView1 = new ListView();
-            tabPage2 = new TabPage();
+            pbDisplaySongImage = new PictureBox();
+            dgvTopSong = new DataGridView();
             button1 = new Button();
-            menuStrip1 = new MenuStrip();
-            topsongToolStripMenuItem = new ToolStripMenuItem();
-            menuToolStripMenuItem = new ToolStripMenuItem();
+            tabPage2 = new TabPage();
+            clmName = new DataGridViewTextBoxColumn();
+            clmImage = new DataGridViewImageColumn();
+            clmArtist = new DataGridViewTextBoxColumn();
             tbcMain.SuspendLayout();
             tbpSonglist.SuspendLayout();
-            menuStrip1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)pbDisplaySongImage).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)dgvTopSong).BeginInit();
             SuspendLayout();
             // 
             // tbcMain
             // 
             tbcMain.Controls.Add(tbpSonglist);
             tbcMain.Controls.Add(tabPage2);
-            tbcMain.Location = new Point(2, 75);
+            tbcMain.Location = new Point(2, 12);
             tbcMain.Name = "tbcMain";
             tbcMain.SelectedIndex = 0;
-            tbcMain.Size = new Size(743, 440);
+            tbcMain.Size = new Size(743, 503);
             tbcMain.TabIndex = 0;
             // 
             // tbpSonglist
             // 
-            tbpSonglist.Controls.Add(listView1);
+            tbpSonglist.Controls.Add(pbDisplaySongImage);
+            tbpSonglist.Controls.Add(dgvTopSong);
+            tbpSonglist.Controls.Add(button1);
             tbpSonglist.Location = new Point(4, 24);
             tbpSonglist.Name = "tbpSonglist";
             tbpSonglist.Padding = new Padding(3);
-            tbpSonglist.Size = new Size(735, 412);
+            tbpSonglist.Size = new Size(735, 475);
             tbpSonglist.TabIndex = 0;
             tbpSonglist.Text = "TopSong";
             tbpSonglist.UseVisualStyleBackColor = true;
             // 
-            // listView1
+            // pbDisplaySongImage
             // 
-            listView1.Location = new Point(6, 6);
-            listView1.Name = "listView1";
-            listView1.Size = new Size(722, 420);
-            listView1.TabIndex = 1;
-            listView1.UseCompatibleStateImageBehavior = false;
+            pbDisplaySongImage.Location = new Point(473, 6);
+            pbDisplaySongImage.Name = "pbDisplaySongImage";
+            pbDisplaySongImage.Size = new Size(258, 188);
+            pbDisplaySongImage.SizeMode = PictureBoxSizeMode.StretchImage;
+            pbDisplaySongImage.TabIndex = 2;
+            pbDisplaySongImage.TabStop = false;
             // 
-            // tabPage2
+            // dgvTopSong
             // 
-            tabPage2.Location = new Point(4, 24);
-            tabPage2.Name = "tabPage2";
-            tabPage2.Padding = new Padding(3);
-            tabPage2.Size = new Size(735, 432);
-            tabPage2.TabIndex = 1;
-            tabPage2.Text = "tabPage2";
-            tabPage2.UseVisualStyleBackColor = true;
+            dgvTopSong.AllowUserToAddRows = false;
+            dgvTopSong.AllowUserToDeleteRows = false;
+            dgvTopSong.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dgvTopSong.Columns.AddRange(new DataGridViewColumn[] { clmName, clmImage, clmArtist });
+            dgvTopSong.Location = new Point(0, 200);
+            dgvTopSong.Name = "dgvTopSong";
+            dgvTopSong.ReadOnly = true;
+            dgvTopSong.RowTemplate.Height = 70;
+            dgvTopSong.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            dgvTopSong.Size = new Size(735, 233);
+            dgvTopSong.TabIndex = 0;
+            dgvTopSong.CellClick += dgvTopSong_CellClick;
             // 
             // button1
             // 
-            button1.Location = new Point(621, 27);
+            button1.Location = new Point(6, 439);
             button1.Name = "button1";
             button1.Size = new Size(113, 31);
             button1.TabIndex = 1;
@@ -90,45 +100,54 @@
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click;
             // 
-            // menuStrip1
+            // tabPage2
             // 
-            menuStrip1.Items.AddRange(new ToolStripItem[] { topsongToolStripMenuItem, menuToolStripMenuItem });
-            menuStrip1.Location = new Point(0, 0);
-            menuStrip1.Name = "menuStrip1";
-            menuStrip1.Size = new Size(746, 24);
-            menuStrip1.TabIndex = 2;
-            menuStrip1.Text = "menuStrip1";
+            tabPage2.Location = new Point(4, 24);
+            tabPage2.Name = "tabPage2";
+            tabPage2.Padding = new Padding(3);
+            tabPage2.Size = new Size(735, 475);
+            tabPage2.TabIndex = 1;
+            tabPage2.Text = "tabPage2";
+            tabPage2.UseVisualStyleBackColor = true;
             // 
-            // topsongToolStripMenuItem
+            // clmName
             // 
-            topsongToolStripMenuItem.Name = "topsongToolStripMenuItem";
-            topsongToolStripMenuItem.Size = new Size(67, 20);
-            topsongToolStripMenuItem.Text = "Top song";
+            clmName.FillWeight = 45.68528F;
+            clmName.HeaderText = "Name";
+            clmName.Name = "clmName";
+            clmName.ReadOnly = true;
+            clmName.Width = 301;
             // 
-            // menuToolStripMenuItem
+            // clmImage
             // 
-            menuToolStripMenuItem.Name = "menuToolStripMenuItem";
-            menuToolStripMenuItem.Size = new Size(79, 20);
-            menuToolStripMenuItem.Text = "Favorite list";
+            clmImage.FillWeight = 171.2557F;
+            clmImage.HeaderText = "Image";
+            clmImage.Name = "clmImage";
+            clmImage.ReadOnly = true;
+            clmImage.Width = 130;
+            // 
+            // clmArtist
+            // 
+            clmArtist.FillWeight = 83.05902F;
+            clmArtist.HeaderText = "Artist";
+            clmArtist.Name = "clmArtist";
+            clmArtist.ReadOnly = true;
+            clmArtist.Width = 270;
             // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(746, 518);
-            Controls.Add(button1);
             Controls.Add(tbcMain);
-            Controls.Add(menuStrip1);
-            MainMenuStrip = menuStrip1;
             Name = "MainForm";
             Text = "Wokeup";
             Load += MainForm_Load;
             tbcMain.ResumeLayout(false);
             tbpSonglist.ResumeLayout(false);
-            menuStrip1.ResumeLayout(false);
-            menuStrip1.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)pbDisplaySongImage).EndInit();
+            ((System.ComponentModel.ISupportInitialize)dgvTopSong).EndInit();
             ResumeLayout(false);
-            PerformLayout();
         }
 
         #endregion
@@ -136,10 +155,11 @@
         private TabControl tbcMain;
         private TabPage tbpSonglist;
         private TabPage tabPage2;
-        private ListView listView1;
         private Button button1;
-        private MenuStrip menuStrip1;
-        private ToolStripMenuItem topsongToolStripMenuItem;
-        private ToolStripMenuItem menuToolStripMenuItem;
+        private DataGridView dgvTopSong;
+        private PictureBox pbDisplaySongImage;
+        private DataGridViewTextBoxColumn clmName;
+        private DataGridViewImageColumn clmImage;
+        private DataGridViewTextBoxColumn clmArtist;
     }
 }

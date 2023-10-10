@@ -12,13 +12,16 @@ namespace Domain
 
         public User user { get; private set; }
 
-        public List<Song> songCollection { get; private set; }
-
+        private List<Song> songCollection;
         public FavoriteList(string name, User owner)
         {
             this.name = name;
             this.user = owner;
             this.songCollection = new List<Song>();
+        }
+
+        public IReadOnlyList<Song> GetSongCollection() { 
+            return songCollection; 
         }
 
         public bool AddSongToFavoriteList(Song song)

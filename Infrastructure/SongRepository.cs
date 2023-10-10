@@ -1,4 +1,4 @@
-﻿using Infrastructure.DbConnect;
+﻿using Infrastructure.Database;
 using Infrastructure.DTO;
 using MySql.Data.MySqlClient;
 
@@ -6,22 +6,21 @@ namespace Infrastructure
 {
     public class SongRepository
     {
-        private static List<SongDTO> listSong = new List<SongDTO>();
-
-        public static List<SongDTO> GetAllSong()
+        private DbConnect dbConnect = new DbConnect();
+        public List<SongDTO> GetAllSong()
         {
             try
             {
-                Connection.connOpen();
-
+                dbConnect.ConnOpen();
                 string sql = "SELECT * FROM song ORDER BY song.songlistened DESC";
-                MySqlCommand cmd = new MySqlCommand(sql, Connection.DbConnect());
+                MySqlCommand cmd = new MySqlCommand(sql, dbConnect.connectMySql);
+                List<SongDTO> listSongs = new List<SongDTO>();
 
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
-                        listSong.Add(
+                        listSongs.Add(
                             new SongDTO(
                                 reader.GetInt32(reader.GetOrdinal("songid")),
                                 reader.GetString(reader.GetOrdinal("songname")),
@@ -32,16 +31,15 @@ namespace Infrastructure
                     }
                 }
 
-                return listSong;
+                return listSongs;
             }
             catch (Exception ex)
             {
-                // Handle the exception, and if needed, log or rethrow it
                 throw new Exception(ex.Message);
             }
             finally
             {
-                Connection.connClose();
+                dbConnect.ConnClose();
             }
         }
     }

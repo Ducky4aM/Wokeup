@@ -1,5 +1,4 @@
 using Infrastructure;
-using Infrastructure.DbConnect;
 using Infrastructure.DTO;
 using MySql.Data.MySqlClient;
 
@@ -7,6 +6,7 @@ namespace Wokeup
 {
     public partial class frmLogin : Form
     {
+        private UserRepository userRepository = new UserRepository();
         public frmLogin()
         {
             InitializeComponent();
@@ -28,7 +28,7 @@ namespace Wokeup
 
         private void btnLogin_Click(object sender, EventArgs e)
         {
-            //UserDTO user = UserRepository.AuthUser(txbUsername.Text.ToLower(), txbPassword.Text);
+            //UserDTO user = userRepository.AuthUser(txbUsername.Text, txbPassword.Text);
 
             //if (user == null)
             //{

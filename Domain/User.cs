@@ -20,7 +20,7 @@ namespace Domain
             this.password = password;
         }
 
-        public List<FavoriteList> GetFavoriteListCollection ()
+        public IReadOnlyList<FavoriteList> GetFavoriteListCollection ()
         {
             return this.favoriteListCollecttion;
         }

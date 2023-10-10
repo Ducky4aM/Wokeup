@@ -1,4 +1,4 @@
-﻿using Infrastructure.DbConnect;
+﻿using Infrastructure.Database;
 using Infrastructure.DTO;
 using MySql.Data.MySqlClient;
 using System;
@@ -11,14 +11,17 @@ namespace Infrastructure
 {
     public class UserRepository
     {
-        public static UserDTO AuthUser(string userName, string userPassword)
+        private DbConnect dbConnect = new DbConnect();
+        public UserRepository(){}
+
+        public UserDTO? AuthUser(string userName, string userPassword)
         {
             try
             {
-                Connection.connOpen();
+                dbConnect.ConnOpen();
 
                 string sql = "SELECT username FROM user WHERE username=@name AND userpassword=@password";
-                MySqlCommand cmd = new MySqlCommand(sql, Connection.DbConnect());
+                MySqlCommand cmd = new MySqlCommand(sql, dbConnect.connectMySql);
                 cmd.Parameters.AddWithValue("@name", userName);
                 cmd.Parameters.AddWithValue("@password", userPassword);
 
@@ -26,7 +29,6 @@ namespace Infrastructure
                 {
                     if (reader.Read())
                     {
-                        // Create and return a UserDTO when a user is found
                         return new UserDTO((string)reader["username"]);
                     }
 
@@ -35,12 +37,11 @@ namespace Infrastructure
             }
             catch (Exception ex)
             {
-                // Handle the exception, and if needed, log or rethrow it
                 throw new Exception(ex.Message);
             }
             finally
             {
-                Connection.connClose();
+                dbConnect.ConnClose();
             }
         }
     }

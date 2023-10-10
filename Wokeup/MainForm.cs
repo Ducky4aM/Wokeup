@@ -8,9 +8,9 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using System.Net;
 using Infrastructure;
 using Infrastructure.DTO;
+using Domain;
 
 namespace Wokeup
 {
@@ -21,55 +21,52 @@ namespace Wokeup
             InitializeComponent();
         }
 
-        private Image DownloadImage(string imageUrl)
-        {
-            WebClient webClient = new WebClient();
-            byte[] imageByte = webClient.DownloadData(imageUrl);
-            MemoryStream stream = new MemoryStream(imageByte);
-
-            return Image.FromStream(stream);
-        }
-
         private void MainForm_Load(object sender, EventArgs e)
         {
+            MusicApp musicApp = new MusicApp();
+            List<Song> songs = (List<Song>)musicApp.SongCollection;
 
-            List<SongDTO> songs = SongRepository.GetAllSong();
-            List<string> imageCollection = new List<string>();
-
-            foreach (var song in songs)
+            foreach (Song song in songs)
             {
-                imageCollection.Add(song.songImage);
+                Bitmap? image = LoadImageFromUrl(song.image);
+                dgvTopSong.Rows.Add(song.ToString(), image, "asd");
             }
-            
 
-
-            ImageList imgList = new ImageList();
-            imgList.ImageSize = new Size(150, 150);
-
-            for (int i = 0; i < imageCollection.Count; i++)
-            {
-                Image image = this.DownloadImage(imageCollection[i]);
-
-                imgList.Images.Add(image);
-
-                listView1.Items.Add(songs[i].songName, i);
-
-            }
-            listView1.LargeImageList = imgList;
+            DataGridViewImageColumn pic = new DataGridViewImageColumn();
+            pic = (DataGridViewImageColumn)dgvTopSong.Columns[1];
+            pic.ImageLayout = DataGridViewImageCellLayout.Stretch;
         }
 
         private void button1_Click(object sender, EventArgs e)
         {
-            //if (listView1.SelectedItems.Count > 0)
-            //{
-            //    // Get the first selected item (assuming single selection)
-            //    ListViewItem selectedItem = listView1.SelectedItems[0];
 
-            //    // Access data from the selected item's sub-items
-            //    string name = selectedItem.Text; // Get the text from the first column (e.g., "Name")
+        }
 
-            //    MessageBox.Show(name);
-            //}
+        private Bitmap? LoadImageFromUrl(string url)
+        {
+            try
+            {
+                var request = WebRequest.Create(url);
+                using (var response = request.GetResponse())
+                using (var stream = response.GetResponseStream())
+                {
+                    return new Bitmap(stream);
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return null;
+            }
+        }
+
+        private void dgvTopSong_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (dgvTopSong.SelectedRows[0].Cells[1].Value.ToString() != "")
+            {
+                Bitmap songImage = (Bitmap)dgvTopSong.SelectedRows[0].Cells[1].Value;
+                pbDisplaySongImage.Image = songImage;
+            }
         }
     }
 }
