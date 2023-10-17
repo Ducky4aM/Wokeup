@@ -42,8 +42,7 @@ namespace Wokeup
                 {
                     MessageBox.Show("Login failed. Invalid username or password.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
-
-                if (user != null)
+                else
                 {
                     MessageBox.Show($"Welcome {txbUsername.Text}", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
