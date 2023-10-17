@@ -10,24 +10,22 @@ namespace Domain
 {
     public class MusicApp
     {
-        private List<Song> songCollection = new List<Song>();
+        private List<Song> topListenedSongs = new List<Song>();
         private SongRepository songRepository = new SongRepository();
 
-        public MusicApp() {
-
-            List<SongDTO> listSongsDto =  songRepository.GetAllSong();
+        public MusicApp(User user) {
+            IReadOnlyList<SongDTO> listSongsDto =  songRepository.GetAllSong();
 
             foreach (SongDTO songDto in listSongsDto )
             {
                 Song song = new Song(songDto.songName, songDto.songImage, songDto.songListened);
-
-                songCollection.Add(song);
+                
+                topListenedSongs.Add(song);
             }
         }
 
-        public IReadOnlyList<Song> SongCollection { 
-            get {  return this.songCollection; } 
+        public IReadOnlyList<Song> GetTopListenedSongs { 
+            get {  return this.topListenedSongs; } 
         }
-
     }
 }

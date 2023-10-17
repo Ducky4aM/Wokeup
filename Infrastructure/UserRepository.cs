@@ -14,34 +14,22 @@ namespace Infrastructure
         private DbConnect dbConnect = new DbConnect();
         public UserRepository(){}
 
-        public UserDTO? AuthUser(string userName, string userPassword)
+        public UserDTO? AuthUser(UserDTO userDto)
         {
-            try
+            MySqlCommand cmd = dbConnect.executeQuery("SELECT * FROM user WHERE username=@name AND userpassword=@password");
+            cmd.Parameters.AddWithValue("@name", userDto.username);
+            cmd.Parameters.AddWithValue("@password", userDto.password);
+
+            using (MySqlDataReader reader = cmd.ExecuteReader())
             {
-                dbConnect.ConnOpen();
-
-                string sql = "SELECT username FROM user WHERE username=@name AND userpassword=@password";
-                MySqlCommand cmd = new MySqlCommand(sql, dbConnect.connectMySql);
-                cmd.Parameters.AddWithValue("@name", userName);
-                cmd.Parameters.AddWithValue("@password", userPassword);
-
-                using (MySqlDataReader reader = cmd.ExecuteReader())
+                while (reader.Read())
                 {
-                    if (reader.Read())
-                    {
-                        return new UserDTO((string)reader["username"]);
-                    }
-
-                    return null;
+                    return new UserDTO(
+                        reader.GetString(reader.GetOrdinal("username")),
+                        reader.GetInt32(reader.GetOrdinal("userid"))
+                        );
                 }
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            finally
-            {
-                dbConnect.ConnClose();
+                return null;
             }
         }
     }

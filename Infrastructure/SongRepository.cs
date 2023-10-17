@@ -7,40 +7,28 @@ namespace Infrastructure
     public class SongRepository
     {
         private DbConnect dbConnect = new DbConnect();
-        public List<SongDTO> GetAllSong()
+
+        public IReadOnlyList<SongDTO> GetAllSong()
         {
-            try
-            {
-                dbConnect.ConnOpen();
-                string sql = "SELECT * FROM song ORDER BY song.songlistened DESC";
-                MySqlCommand cmd = new MySqlCommand(sql, dbConnect.connectMySql);
-                List<SongDTO> listSongs = new List<SongDTO>();
+            MySqlCommand cmd = dbConnect.executeQuery("SELECT * FROM song ORDER BY song.songlistened DESC");
+            List<SongDTO> listSongs = new List<SongDTO>();
 
-                using (MySqlDataReader reader = cmd.ExecuteReader())
+            using (MySqlDataReader reader = cmd.ExecuteReader())
+            {
+                while (reader.Read())
                 {
-                    while (reader.Read())
-                    {
-                        listSongs.Add(
-                            new SongDTO(
-                                reader.GetInt32(reader.GetOrdinal("songid")),
-                                reader.GetString(reader.GetOrdinal("songname")),
-                                reader.GetString(reader.GetOrdinal("songimage")),
-                                reader.GetInt32(reader.GetOrdinal("songlistened"))
-                            )
-                        );
-                    }
+                    listSongs.Add(
+                        new SongDTO(
+                            reader.GetInt32(reader.GetOrdinal("songid")),
+                            reader.GetString(reader.GetOrdinal("songname")),
+                            reader.GetString(reader.GetOrdinal("songimage")),
+                            reader.GetInt32(reader.GetOrdinal("songlistened"))
+                        )
+                    );
                 }
+            }
 
-                return listSongs;
-            }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
-            finally
-            {
-                dbConnect.ConnClose();
-            }
+            return listSongs.AsReadOnly();
         }
     }
 }

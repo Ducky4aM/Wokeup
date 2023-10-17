@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Infrastructure.DTO;
 using MySql.Data.MySqlClient;
 
 namespace Infrastructure.Database
@@ -37,6 +38,21 @@ namespace Infrastructure.Database
             if (connectMySql.State == ConnectionState.Open)
             {
                 connectMySql.Close();
+            }
+        }
+
+        public MySqlCommand executeQuery(string query)
+        {
+            try
+            {
+                ConnOpen();
+                MySqlCommand cmd = new MySqlCommand(query ,connectMySql);
+
+                return cmd;
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
             }
         }
     }
