@@ -1,4 +1,6 @@
-﻿using System;
+﻿using Infrastructure;
+using Infrastructure.DTO;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -14,6 +16,8 @@ namespace Domain
 
         private List<Song> songs = new List<Song>();
 
+        private SongRepository songRepository = new SongRepository();
+
         public FavoriteList(string name)
         {
             this.name = name;
@@ -25,8 +29,22 @@ namespace Domain
             this.id = id;
         }
 
-        public IReadOnlyList<Song> GetSongs() { 
-            return songs; 
+        public IReadOnlyList<Song> GetSongs() {
+            FavoriteListDTO favoriteListDto = new FavoriteListDTO(this.id, this.name);
+
+            IReadOnlyList<SongDTO> favoriteListSongDtos = this.songRepository.GetSongFromFavoriteList(favoriteListDto);
+
+            if (favoriteListSongDtos.Count > 0)
+            {
+                this.songs.Clear();
+
+                foreach (SongDTO songDto in favoriteListSongDtos)
+                {
+                    this.songs.Add(new Song(songDto.songName, songDto.songImage, songDto.songListened));
+                }
+            }
+
+            return this.songs.AsReadOnly();
         }
 
         public bool AddSongToFavoriteList(Song song)

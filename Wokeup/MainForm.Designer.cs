@@ -38,6 +38,7 @@
             clmArtist = new DataGridViewTextBoxColumn();
             button1 = new Button();
             tbpFavoriteList = new TabPage();
+            lsbFavoriteList = new ListBox();
             dgvSongOfFavoriteList = new DataGridView();
             dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
             dataGridViewImageColumn1 = new DataGridViewImageColumn();
@@ -46,15 +47,12 @@
             lblFavoriteList = new Label();
             btnRemoveFavoriteList = new Button();
             btnCreatFavoriteList = new Button();
-            dgvFavoriteList = new DataGridView();
-            clmFavoriteListName = new DataGridViewTextBoxColumn();
             tbcMain.SuspendLayout();
             tbpSonglist.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)pbDisplaySongImage).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvTopSong).BeginInit();
             tbpFavoriteList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvSongOfFavoriteList).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dgvFavoriteList).BeginInit();
             SuspendLayout();
             // 
             // tbcMain
@@ -144,12 +142,12 @@
             // 
             // tbpFavoriteList
             // 
+            tbpFavoriteList.Controls.Add(lsbFavoriteList);
             tbpFavoriteList.Controls.Add(dgvSongOfFavoriteList);
             tbpFavoriteList.Controls.Add(lblSongInFavoriteList);
             tbpFavoriteList.Controls.Add(lblFavoriteList);
             tbpFavoriteList.Controls.Add(btnRemoveFavoriteList);
             tbpFavoriteList.Controls.Add(btnCreatFavoriteList);
-            tbpFavoriteList.Controls.Add(dgvFavoriteList);
             tbpFavoriteList.Location = new Point(4, 24);
             tbpFavoriteList.Name = "tbpFavoriteList";
             tbpFavoriteList.Padding = new Padding(3);
@@ -157,6 +155,16 @@
             tbpFavoriteList.TabIndex = 1;
             tbpFavoriteList.Text = "FavoriteList";
             tbpFavoriteList.UseVisualStyleBackColor = true;
+            // 
+            // lsbFavoriteList
+            // 
+            lsbFavoriteList.FormattingEnabled = true;
+            lsbFavoriteList.ItemHeight = 15;
+            lsbFavoriteList.Location = new Point(6, 57);
+            lsbFavoriteList.Name = "lsbFavoriteList";
+            lsbFavoriteList.Size = new Size(182, 364);
+            lsbFavoriteList.TabIndex = 4;
+            lsbFavoriteList.SelectedIndexChanged += lsbFavoriteList_SelectedIndexChanged;
             // 
             // dgvSongOfFavoriteList
             // 
@@ -238,22 +246,6 @@
             btnCreatFavoriteList.UseVisualStyleBackColor = true;
             btnCreatFavoriteList.Click += btnCreatFavoriteList_Click;
             // 
-            // dgvFavoriteList
-            // 
-            dgvFavoriteList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvFavoriteList.Columns.AddRange(new DataGridViewColumn[] { clmFavoriteListName });
-            dgvFavoriteList.Location = new Point(6, 57);
-            dgvFavoriteList.Name = "dgvFavoriteList";
-            dgvFavoriteList.RowTemplate.Height = 25;
-            dgvFavoriteList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvFavoriteList.Size = new Size(182, 365);
-            dgvFavoriteList.TabIndex = 0;
-            // 
-            // clmFavoriteListName
-            // 
-            clmFavoriteListName.HeaderText = "Name";
-            clmFavoriteListName.Name = "clmFavoriteListName";
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -270,7 +262,6 @@
             tbpFavoriteList.ResumeLayout(false);
             tbpFavoriteList.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvSongOfFavoriteList).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dgvFavoriteList).EndInit();
             ResumeLayout(false);
         }
 
@@ -287,13 +278,12 @@
         private DataGridViewTextBoxColumn clmArtist;
         private Button btnRemoveFavoriteList;
         private Button btnCreatFavoriteList;
-        private DataGridView dgvFavoriteList;
         private Label lblSongInFavoriteList;
         private Label lblFavoriteList;
-        private DataGridViewTextBoxColumn clmFavoriteListName;
         private DataGridView dgvSongOfFavoriteList;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private DataGridViewImageColumn dataGridViewImageColumn1;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private ListBox lsbFavoriteList;
     }
 }

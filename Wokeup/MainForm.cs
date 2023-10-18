@@ -11,6 +11,7 @@ using System.Windows.Forms;
 using Infrastructure;
 using Infrastructure.DTO;
 using Domain;
+using Org.BouncyCastle.Utilities;
 
 namespace Wokeup
 {
@@ -45,10 +46,11 @@ namespace Wokeup
         private void Load_Favorite_list()
         {
             IReadOnlyList<FavoriteList> favoriteLists = this.user.GetUserFavoriteLists();
+            lsbFavoriteList.Items.Clear();
 
             foreach (FavoriteList favoriteList in favoriteLists)
             {
-                dgvFavoriteList.Rows.Add(favoriteList);
+                lsbFavoriteList.Items.Add(favoriteList);
             }
         }
 
@@ -86,7 +88,7 @@ namespace Wokeup
 
         private void btnCreatFavoriteList_Click(object sender, EventArgs e)
         {
-            dgvFavoriteList.Rows.Clear();
+            lsbFavoriteList.Items.Clear();
             this.Visible = false;
             AddFavoriteListFOrm f = new AddFavoriteListFOrm(this.user);
             f.ShowDialog();
@@ -96,17 +98,46 @@ namespace Wokeup
 
         private void btnRemoveFavoriteList_Click(object sender, EventArgs e)
         {
-            if (dgvTopSong.SelectedRows.Count > 0)
+            FavoriteList? favoriteList = lsbFavoriteList.SelectedItem as FavoriteList;
+
+            if (favoriteList != null)
             {
-                // Access the cell containing the FavoriteList
-                FavoriteList favoriteList = dgvTopSong.SelectedRows[0].DataBoundItem as FavoriteList;
+                bool removeFavoriteList = this.user.RemoveFavoriteList(favoriteList);
+
+                if (removeFavoriteList == false)
+                {
+                    MessageBox.Show("Can't remove favorite list, please try again later!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+                else
+                {
+                    Load_Favorite_list();
+                }
+            }
+        }
+
+        private void lsbFavoriteList_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            dgvSongOfFavoriteList.Rows.Clear();
+            if (lsbFavoriteList.SelectedIndex > -1)
+            {
+                FavoriteList? favoriteList = lsbFavoriteList.SelectedItem as FavoriteList;
 
                 if (favoriteList != null)
                 {
-                    MessageBox.Show(favoriteList.name);
+                    IReadOnlyList<Song> favoriteListSongs = favoriteList.GetSongs();
+
+
+                    foreach (Song song in favoriteListSongs)
+                    {
+                        Bitmap? image = LoadImageFromUrl(song.image);
+                        dgvSongOfFavoriteList.Rows.Add(song, image, "artist");
+                    }
+
+                    DataGridViewImageColumn pic = new DataGridViewImageColumn();
+                    pic = (DataGridViewImageColumn)dgvSongOfFavoriteList.Columns[1];
+                    pic.ImageLayout = DataGridViewImageCellLayout.Stretch;
                 }
             }
-
         }
     }
 }

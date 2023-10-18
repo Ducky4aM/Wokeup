@@ -121,7 +121,7 @@
   <data name="pbDisplaySongImage.BackgroundImage" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAAoEAAAGVCAIAAAAOnrz/AAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAAO
-        vgAADr4B6kKxwAAA/7JJREFUeF7s/Ym7ZedV3/vyB9yLTwIJhMhYtqzGakpSValUakpNSSrJ6vu+b91h
+        vAAADrwBlbxySQAA/7JJREFUeF7s/Ym7ZedV3/vyB9yLTwIJhMhYtqzGakpSValUakpNSSrJ6vu+b91h
         DMY22Ab3DTbGuMGAjcHGTcANpkl3kpyTPhAS0nBPbgjpLiSEnPQQSMi9Offe3zt+Y4x3jHe+c645116r
         dlWpnuf7jGdHLpWA2Hz41Zx77a97wTe8iP0v3jd2O5X9Ee+PjfVi9EfZH5/oJd/gfdNU3/hNp2nfPNof
         K71U+xOj/fHS6aVvGe2bamd8058c7ZtrZ37zKaP9idgLz+r2LbFvRS/r9idjL0JnDzul6VR2TtMLm17M
@@ -1628,9 +1628,6 @@
     <value>True</value>
   </metadata>
   <metadata name="dataGridViewTextBoxColumn2.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
-    <value>True</value>
-  </metadata>
-  <metadata name="clmFavoriteListName.UserAddedColumn" type="System.Boolean, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>True</value>
   </metadata>
 </root>

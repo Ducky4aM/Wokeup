@@ -38,19 +38,39 @@ namespace Infrastructure
 
         }
 
-        public void AddNewFavoriteList(FavoriteListDTO favoriteList, int userId)
+        public bool AddNewFavoriteList(FavoriteListDTO favoriteListDto, int userId)
         {
             try
             {
                 MySqlCommand cmd = dbConnect.executeQuery("INSERT INTO favoritelist (favoritelistname, owner) VALUES (@listname, @userid)");
-                cmd.Parameters.AddWithValue("@listname", favoriteList.name);
+                cmd.Parameters.AddWithValue("@listname", favoriteListDto.name);
                 cmd.Parameters.AddWithValue("@userid", userId);
 
                 cmd.ExecuteNonQuery();
+                return true;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
+
+        public bool RemoveFavoriteList(FavoriteListDTO favoriteListDto)
+        {
+            try
+            {
+                MySqlCommand cmd = dbConnect.executeQuery("DELETE FROM favoritelist WHERE favoritelistid = @id");
+                cmd.Parameters.AddWithValue("@id", favoriteListDto.id);
+
+                cmd.ExecuteNonQuery();
+
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
             }
         }
     }

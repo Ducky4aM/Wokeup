@@ -45,11 +45,9 @@ namespace Domain
 
             FavoriteList newList = new FavoriteList(name);
             FavoriteListDTO favoriteListDto = new FavoriteListDTO(name);
-            this.favoriteListRepository.AddNewFavoriteList(favoriteListDto, this.id);
 
-            favoriteLists.Add(newList); 
-
-            return true;
+            favoriteLists.Add(newList);
+            return this.favoriteListRepository.AddNewFavoriteList(favoriteListDto, this.id);
         }
 
         private bool IsFavorieListExist(string name)
@@ -68,6 +66,14 @@ namespace Domain
             }
 
             return this.favoriteLists.AsReadOnly();
+        }
+
+        public bool RemoveFavoriteList(FavoriteList favoriteList)
+        {
+            favoriteLists.Remove(favoriteList);
+            FavoriteListDTO favoriteListDTO = new FavoriteListDTO(favoriteList.id, favoriteList.name);
+
+            return this.favoriteListRepository.RemoveFavoriteList(favoriteListDTO);
         }
 
     }
