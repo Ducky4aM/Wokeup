@@ -54,11 +54,6 @@ namespace Wokeup
             }
         }
 
-        private void button1_Click(object sender, EventArgs e)
-        {
-            MessageBox.Show(user.id.ToString());
-        }
-
         private Bitmap? LoadImageFromUrl(string url)
         {
             try
@@ -100,7 +95,14 @@ namespace Wokeup
         {
             FavoriteList? favoriteList = lsbFavoriteList.SelectedItem as FavoriteList;
 
-            if (favoriteList != null)
+            DialogResult result = MessageBox.Show(
+                $"Are you sure you want to delete {favoriteList.name}, The song on this list will alse be deleted",
+                "Warning",
+                MessageBoxButtons.OKCancel,
+                MessageBoxIcon.Warning
+                );
+
+            if (result == DialogResult.OK)
             {
                 bool removeFavoriteList = this.user.RemoveFavoriteList(favoriteList);
 
@@ -111,8 +113,10 @@ namespace Wokeup
                 else
                 {
                     Load_Favorite_list();
+                    lsbFavoriteList.SelectedIndex = 0;
                 }
             }
+
         }
 
         private void lsbFavoriteList_SelectedIndexChanged(object sender, EventArgs e)
@@ -137,6 +141,36 @@ namespace Wokeup
                     pic = (DataGridViewImageColumn)dgvSongOfFavoriteList.Columns[1];
                     pic.ImageLayout = DataGridViewImageCellLayout.Stretch;
                 }
+            }
+        }
+
+        private void btnAddSongToFavoriteList_Click(object sender, EventArgs e)
+        {
+            if (dgvTopSong.SelectedRows.Count > 0)
+            {
+                Song? selectedSong = dgvTopSong.SelectedRows[0].Cells[0].Value as Song;
+                Bitmap songImage = (Bitmap)dgvTopSong.SelectedRows[0].Cells[1].Value;
+
+                if (selectedSong != null)
+                {
+                    this.Visible = false;
+                    AddSongToFavoriteListForm f = new AddSongToFavoriteListForm(user, selectedSong, songImage);
+                    f.ShowDialog();
+                    this.Visible = true;
+                }
+            }
+        }
+
+        private void tbcMain_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            TabPage selectedTabPage = tbcMain.SelectedTab;
+            if (selectedTabPage.Text == "Top song")
+            {
+                dgvTopSong.CurrentCell = dgvTopSong.Rows[0].Cells[0];
+            }
+            if (selectedTabPage.Text == "My favorite")
+            {
+                lsbFavoriteList.SelectedIndex = 0;
             }
         }
     }

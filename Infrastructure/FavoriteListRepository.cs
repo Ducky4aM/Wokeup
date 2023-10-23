@@ -73,5 +73,23 @@ namespace Infrastructure
                 return false;
             }
         }
+
+        public bool AddSongTofavorietList(SongDTO songDto, FavoriteListDTO favoriteListDto)
+        {
+            try
+            {
+                MySqlCommand cmd = dbConnect.executeQuery("INSERT INTO favoritelistsong (songid, favoritelistid) VALUES (@songid, @favoritelistid)");
+                cmd.Parameters.AddWithValue("@songid", songDto.songId);
+                cmd.Parameters.AddWithValue("@favoritelistid", favoriteListDto.id);
+
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
     }
 }

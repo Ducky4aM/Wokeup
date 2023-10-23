@@ -36,7 +36,7 @@
             clmName = new DataGridViewTextBoxColumn();
             clmImage = new DataGridViewImageColumn();
             clmArtist = new DataGridViewTextBoxColumn();
-            button1 = new Button();
+            btnAddSongToFavoriteList = new Button();
             tbpFavoriteList = new TabPage();
             lsbFavoriteList = new ListBox();
             dgvSongOfFavoriteList = new DataGridView();
@@ -64,18 +64,19 @@
             tbcMain.SelectedIndex = 0;
             tbcMain.Size = new Size(743, 513);
             tbcMain.TabIndex = 0;
+            tbcMain.SelectedIndexChanged += tbcMain_SelectedIndexChanged;
             // 
             // tbpSonglist
             // 
             tbpSonglist.Controls.Add(pbDisplaySongImage);
             tbpSonglist.Controls.Add(dgvTopSong);
-            tbpSonglist.Controls.Add(button1);
+            tbpSonglist.Controls.Add(btnAddSongToFavoriteList);
             tbpSonglist.Location = new Point(4, 24);
             tbpSonglist.Name = "tbpSonglist";
             tbpSonglist.Padding = new Padding(3);
             tbpSonglist.Size = new Size(735, 485);
             tbpSonglist.TabIndex = 0;
-            tbpSonglist.Text = "TopSong";
+            tbpSonglist.Text = "Top song";
             tbpSonglist.UseVisualStyleBackColor = true;
             // 
             // pbDisplaySongImage
@@ -102,7 +103,7 @@
             dgvTopSong.ReadOnly = true;
             dgvTopSong.RowTemplate.Height = 70;
             dgvTopSong.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvTopSong.Size = new Size(735, 245);
+            dgvTopSong.Size = new Size(735, 282);
             dgvTopSong.TabIndex = 0;
             dgvTopSong.CellClick += dgvTopSong_CellClick;
             // 
@@ -130,15 +131,16 @@
             clmArtist.ReadOnly = true;
             clmArtist.Width = 270;
             // 
-            // button1
+            // btnAddSongToFavoriteList
             // 
-            button1.Location = new Point(3, 451);
-            button1.Name = "button1";
-            button1.Size = new Size(113, 31);
-            button1.TabIndex = 1;
-            button1.Text = "button1";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            btnAddSongToFavoriteList.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
+            btnAddSongToFavoriteList.Location = new Point(6, 165);
+            btnAddSongToFavoriteList.Name = "btnAddSongToFavoriteList";
+            btnAddSongToFavoriteList.Size = new Size(138, 29);
+            btnAddSongToFavoriteList.TabIndex = 1;
+            btnAddSongToFavoriteList.Text = "Add to favorite list";
+            btnAddSongToFavoriteList.UseVisualStyleBackColor = true;
+            btnAddSongToFavoriteList.Click += btnAddSongToFavoriteList_Click;
             // 
             // tbpFavoriteList
             // 
@@ -153,7 +155,7 @@
             tbpFavoriteList.Padding = new Padding(3);
             tbpFavoriteList.Size = new Size(735, 485);
             tbpFavoriteList.TabIndex = 1;
-            tbpFavoriteList.Text = "FavoriteList";
+            tbpFavoriteList.Text = "My favorite";
             tbpFavoriteList.UseVisualStyleBackColor = true;
             // 
             // lsbFavoriteList
@@ -270,12 +272,9 @@
         private TabControl tbcMain;
         private TabPage tbpSonglist;
         private TabPage tbpFavoriteList;
-        private Button button1;
+        private Button btnAddSongToFavoriteList;
         private DataGridView dgvTopSong;
         private PictureBox pbDisplaySongImage;
-        private DataGridViewTextBoxColumn clmName;
-        private DataGridViewImageColumn clmImage;
-        private DataGridViewTextBoxColumn clmArtist;
         private Button btnRemoveFavoriteList;
         private Button btnCreatFavoriteList;
         private Label lblSongInFavoriteList;
@@ -285,5 +284,8 @@
         private DataGridViewImageColumn dataGridViewImageColumn1;
         private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private ListBox lsbFavoriteList;
+        private DataGridViewTextBoxColumn clmName;
+        private DataGridViewImageColumn clmImage;
+        private DataGridViewTextBoxColumn clmArtist;
     }
 }

@@ -8,7 +8,7 @@ namespace Infrastructure
     {
         private DbConnect dbConnect = new DbConnect();
 
-        public IReadOnlyList<SongDTO> GetAllSong()
+        public IReadOnlyList<SongDTO> GetTopSongs()
         {
             MySqlCommand cmd = this.dbConnect.executeQuery("SELECT * FROM song ORDER BY song.songlistened DESC");
             List<SongDTO> listSongs = new List<SongDTO>();

@@ -19,5 +19,10 @@ namespace Infrastructure.DTO
             this.songImage = songImage;
             this.songListened = songListened;
         }
+
+        public SongDTO(int songid)
+        {
+            this.songId = songid;
+        }
     }
 }

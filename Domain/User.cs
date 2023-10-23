@@ -31,11 +31,6 @@ namespace Domain
             this.id = id;
         }
 
-        public IReadOnlyList<FavoriteList> GetFavoriteListCollection ()
-        {
-            return this.favoriteLists;
-        }
-
         public bool CreateNewFavoriteList(string name)
         {
             if (IsFavorieListExist(name) == true)
@@ -68,8 +63,13 @@ namespace Domain
             return this.favoriteLists.AsReadOnly();
         }
 
-        public bool RemoveFavoriteList(FavoriteList favoriteList)
+        public bool RemoveFavoriteList(FavoriteList? favoriteList)
         {
+            if (favoriteList == null)
+            {
+                return false;
+            }
+
             favoriteLists.Remove(favoriteList);
             FavoriteListDTO favoriteListDTO = new FavoriteListDTO(favoriteList.id, favoriteList.name);
 

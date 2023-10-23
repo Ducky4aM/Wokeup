@@ -14,11 +14,11 @@ namespace Domain
         private SongRepository songRepository = new SongRepository();
 
         public MusicApp(User user) {
-            IReadOnlyList<SongDTO> listSongsDto =  songRepository.GetAllSong();
+            IReadOnlyList<SongDTO> listSongsDto =  songRepository.GetTopSongs();
 
             foreach (SongDTO songDto in listSongsDto )
             {
-                Song song = new Song(songDto.songName, songDto.songImage, songDto.songListened);
+                Song song = new Song(songDto.songId,songDto.songName, songDto.songImage, songDto.songListened);
                 
                 topListenedSongs.Add(song);
             }

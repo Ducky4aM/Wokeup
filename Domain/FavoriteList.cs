@@ -17,6 +17,7 @@ namespace Domain
         private List<Song> songs = new List<Song>();
 
         private SongRepository songRepository = new SongRepository();
+        private FavoriteListRepository favoriteListRepository = new FavoriteListRepository();
 
         public FavoriteList(string name)
         {
@@ -40,7 +41,7 @@ namespace Domain
 
                 foreach (SongDTO songDto in favoriteListSongDtos)
                 {
-                    this.songs.Add(new Song(songDto.songName, songDto.songImage, songDto.songListened));
+                    this.songs.Add(new Song(songDto.songId,songDto.songName, songDto.songImage, songDto.songListened));
                 }
             }
 
@@ -49,6 +50,19 @@ namespace Domain
 
         public bool AddSongToFavoriteList(Song song)
         {
+            SongDTO songDto = new SongDTO(song.id);
+            FavoriteListDTO favoriteList = new FavoriteListDTO(this.id, this.name);
+            IReadOnlyList<Song> songlist = this.GetSongs();
+
+            bool isSongExistInList = songlist.Any(songCheck => songCheck.id == song.id);
+
+
+            if (isSongExistInList == true)
+            {
+                return false;
+            }
+
+            this.favoriteListRepository.AddSongTofavorietList(songDto, favoriteList);
             this.songs.Add(song);
 
             return true;
