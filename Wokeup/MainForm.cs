@@ -111,7 +111,7 @@ namespace Wokeup
             FavoriteList? favoriteList = lsbFavoriteList.SelectedItem as FavoriteList;
 
             DialogResult result = MessageBox.Show(
-                $"Are you sure you want to delete {favoriteList.name}, The song on this list will alse be deleted",
+                $"Are you sure you want to delete `{favoriteList.name}`, The song on this list will also be deleted",
                 "Warning",
                 MessageBoxButtons.OKCancel,
                 MessageBoxIcon.Warning
@@ -175,7 +175,12 @@ namespace Wokeup
             }
             if (selectedTabPage.Text == "My favorite")
             {
-                lsbFavoriteList.SelectedIndex = 0;
+                if(lsbFavoriteList.Items.Count > 0)
+                {
+                    lsbFavoriteList.SelectedIndex = 0;
+                    FavoriteList favoriteList = lsbFavoriteList.SelectedItem as FavoriteList;
+                    this.LoadSongFromFavorite(favoriteList.GetSongs());
+                }
             }
         }
 
