@@ -92,7 +92,7 @@
             BtnCancelAddSongToFavorite.Name = "BtnCancelAddSongToFavorite";
             BtnCancelAddSongToFavorite.Size = new Size(82, 40);
             BtnCancelAddSongToFavorite.TabIndex = 5;
-            BtnCancelAddSongToFavorite.Text = "button1";
+            BtnCancelAddSongToFavorite.Text = "Cancel";
             BtnCancelAddSongToFavorite.UseVisualStyleBackColor = true;
             BtnCancelAddSongToFavorite.Click += BtnCancelAddSongToFavorite_Click;
             // 

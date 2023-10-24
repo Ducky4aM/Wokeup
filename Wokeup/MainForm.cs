@@ -54,6 +54,21 @@ namespace Wokeup
             }
         }
 
+        private void LoadSongFromFavorite(IReadOnlyList<Song> songs)
+        {
+            dgvSongOfFavoriteList.Rows.Clear();
+
+            foreach (Song song in songs)
+            {
+                Bitmap? image = LoadImageFromUrl(song.image);
+                dgvSongOfFavoriteList.Rows.Add(song, image, "artist");
+            }
+
+            DataGridViewImageColumn pic = new DataGridViewImageColumn();
+            pic = (DataGridViewImageColumn)dgvSongOfFavoriteList.Columns[1];
+            pic.ImageLayout = DataGridViewImageCellLayout.Stretch;
+        }
+
         private Bitmap? LoadImageFromUrl(string url)
         {
             try
@@ -121,7 +136,6 @@ namespace Wokeup
 
         private void lsbFavoriteList_SelectedIndexChanged(object sender, EventArgs e)
         {
-            dgvSongOfFavoriteList.Rows.Clear();
             if (lsbFavoriteList.SelectedIndex > -1)
             {
                 FavoriteList? favoriteList = lsbFavoriteList.SelectedItem as FavoriteList;
@@ -130,16 +144,7 @@ namespace Wokeup
                 {
                     IReadOnlyList<Song> favoriteListSongs = favoriteList.GetSongs();
 
-
-                    foreach (Song song in favoriteListSongs)
-                    {
-                        Bitmap? image = LoadImageFromUrl(song.image);
-                        dgvSongOfFavoriteList.Rows.Add(song, image, "artist");
-                    }
-
-                    DataGridViewImageColumn pic = new DataGridViewImageColumn();
-                    pic = (DataGridViewImageColumn)dgvSongOfFavoriteList.Columns[1];
-                    pic.ImageLayout = DataGridViewImageCellLayout.Stretch;
+                    this.LoadSongFromFavorite(favoriteListSongs);
                 }
             }
         }
@@ -171,6 +176,26 @@ namespace Wokeup
             if (selectedTabPage.Text == "My favorite")
             {
                 lsbFavoriteList.SelectedIndex = 0;
+            }
+        }
+
+        private void dgvSongOfFavoriteList_CellClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.ColumnIndex == dgvSongOfFavoriteList.Columns["clmDeleteSongFromFavoriteList"].Index)
+            {
+                if (lsbFavoriteList.SelectedItem is FavoriteList selectedFavoriteList)
+                {
+                    bool isRemoved = selectedFavoriteList.RemoveSongFromFavoriteList(dgvSongOfFavoriteList.SelectedRows[0].Cells[0].Value as Song);
+
+                    if (isRemoved == true)
+                    {
+                        this.LoadSongFromFavorite(selectedFavoriteList.GetSongs());
+                    }
+                    else
+                    {
+                        MessageBox.Show("Can't remove song, try again later!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    }
+                }
             }
         }
     }

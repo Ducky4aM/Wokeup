@@ -68,6 +68,20 @@ namespace Domain
             return true;
         }
 
+        public bool RemoveSongFromFavoriteList(Song song)
+        {
+            bool isRemoved = favoriteListRepository.RemoveSongFomFavoriteList(new SongDTO(song.id), new FavoriteListDTO(this.id, this.name));
+
+            if (isRemoved == false)
+            {
+                return false;
+            }
+
+            this.songs.Remove(song);
+            return true;
+
+        }
+
         public override string ToString()
         {
             return this.name;

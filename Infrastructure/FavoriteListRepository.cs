@@ -91,5 +91,24 @@ namespace Infrastructure
                 return false;
             }
         }
+
+
+        public bool RemoveSongFomFavoriteList(SongDTO songDto, FavoriteListDTO favoriteListDto)
+        {
+            try
+            {
+                MySqlCommand cmd = dbConnect.executeQuery("Delete FROM favoritelistsong WHERE songid = @songid AND favoritelistid = @favoritelistid");
+                cmd.Parameters.AddWithValue("@songid", songDto.songId);
+                cmd.Parameters.AddWithValue("@favoritelistid", favoriteListDto.id);
+
+                cmd.ExecuteNonQuery();
+                return true;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return false;
+            }
+        }
     }
 }
