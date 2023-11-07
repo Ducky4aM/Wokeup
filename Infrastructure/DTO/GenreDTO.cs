@@ -6,7 +6,12 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.DTO
 {
-    internal class GenreDTO
+    public class GenreDTO
     {
+        public string name { get; set; }
+
+        public GenreDTO(string name) { 
+            this.name = name;
+        }
     }
 }

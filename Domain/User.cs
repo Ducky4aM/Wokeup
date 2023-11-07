@@ -1,4 +1,5 @@
-﻿using Infrastructure;
+﻿using Domain.Service;
+using Infrastructure;
 using Infrastructure.DTO;
 using System;
 using System.Collections.Generic;
@@ -10,14 +11,11 @@ namespace Domain
 {
     public class User
     {
+        public int id { get; set; }  
         public string name { get; private set; }
         public string password { get; private set; }
 
-        public int id { get; private set; }
-
         private List<FavoriteList> favoriteLists = new List<FavoriteList>();
-
-        private FavoriteListRepository favoriteListRepository = new FavoriteListRepository();
 
         public User(string name, string password)
         {
@@ -25,56 +23,39 @@ namespace Domain
             this.password = password;
         }
 
-        public User(string name,int id)
+        public User(int id, string name)
         {
-            this.name = name;
             this.id = id;
+            this.name = name;
         }
 
-        public bool CreateNewFavoriteList(string name)
+        internal void RemoveFavoriteList(FavoriteList favoriteList)
         {
-            if (IsFavorieListExist(name) == true)
+            if (this.favoriteLists.Contains(favoriteList))
             {
-                return false;
+                this.favoriteLists.Remove(favoriteList);
+            }
+        }
+
+        internal void AddFavoriteList(FavoriteList favorite_list)
+        {
+            //hier better met bool returm type
+            if (this.favoriteLists.Any(favoritelist => favoritelist.name.Equals(favorite_list.name)))
+            {
+                return;
             }
 
-            FavoriteList newList = new FavoriteList(name);
-            FavoriteListDTO favoriteListDto = new FavoriteListDTO(name);
-
-            favoriteLists.Add(newList);
-            return this.favoriteListRepository.AddNewFavoriteList(favoriteListDto, this.id);
+            this.favoriteLists.Add(favorite_list);
         }
 
-        private bool IsFavorieListExist(string name)
+        internal void UpdateFavoriteList(List<FavoriteList> favoriteLists)
         {
-            return this.favoriteLists.Any(favoritelist => favoritelist.name == name);
+            this.favoriteLists = favoriteLists;
         }
 
-        public IReadOnlyList<FavoriteList> GetUserFavoriteLists()
+        public IReadOnlyList<FavoriteList> GetFavoriteLists()
         {
-            IReadOnlyList<FavoriteListDTO> favoriteListsDto = favoriteListRepository.GetAllFavoriteListBaseOnUserId(this.id);
-            this.favoriteLists.Clear();
-
-            foreach (FavoriteListDTO favoriteListDto in favoriteListsDto)
-            {
-                this.favoriteLists.Add(new FavoriteList(favoriteListDto.id,favoriteListDto.name));
-            }
-
             return this.favoriteLists.AsReadOnly();
         }
-
-        public bool RemoveFavoriteList(FavoriteList? favoriteList)
-        {
-            if (favoriteList == null)
-            {
-                return false;
-            }
-
-            favoriteLists.Remove(favoriteList);
-            FavoriteListDTO favoriteListDTO = new FavoriteListDTO(favoriteList.id, favoriteList.name);
-
-            return this.favoriteListRepository.RemoveFavoriteList(favoriteListDTO);
-        }
-
     }
 }

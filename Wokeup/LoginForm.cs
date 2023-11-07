@@ -1,4 +1,5 @@
 using Domain;
+using Domain.Auth;
 using Infrastructure;
 using Infrastructure.DTO;
 using MySql.Data.MySqlClient;
@@ -31,22 +32,26 @@ namespace Wokeup
         {
             if (txbUsername.Text == "" || txbPassword.Text == "")
             {
-                MessageBox.Show("Empty username or password", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Empty username or password", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning); 
             }
             else
             {
                 Authentication authentication = new Authentication();
-                User? user = authentication.AuthUser(new User(txbUsername.Text, txbPassword.Text));
+                AuthenicationResult authenicationResult = authentication.AuthUser(txbUsername.Text, txbPassword.Text);
 
-                if (user == null)
+                if (authenicationResult.AuthenticationStatus != null)
                 {
-                    MessageBox.Show("Login failed. Invalid username or password.", "Warning!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(
+                        authenicationResult.AuthenticationStatus.messageText,
+                        authenicationResult.AuthenticationStatus.messageTitle
+                        , MessageBoxButtons.OK,
+                        MessageBoxIcon.Warning
+                        );
                 }
-                else
+                if (authenicationResult.AuthenticatedUser != null)
                 {
-                    MessageBox.Show($"Welcome {txbUsername.Text}", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
-
-                    this.OpenMainForm(user);
+                    MessageBox.Show($"Welcome {authenicationResult.AuthenticatedUser.name}", "Info", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    this.OpenMainForm(authenicationResult.AuthenticatedUser);
                 }
             }
         }

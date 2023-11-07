@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Domain.Service;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -30,7 +31,7 @@ namespace Wokeup
             lblSongTitle.Text = selectedSong.ToString();
             pcbAddSongToFavoriteList.Image = this.songImage;
 
-            IReadOnlyList<FavoriteList> favoriteLists = user.GetUserFavoriteLists();
+            IReadOnlyList<FavoriteList> favoriteLists = user.GetFavoriteLists();
 
             foreach (FavoriteList favoriteList in favoriteLists)
             {
@@ -40,24 +41,24 @@ namespace Wokeup
 
         private void btnConfirmAddSongToFavoriteList_Click(object sender, EventArgs e)
         {
-            FavoriteList? favoriteList = cmbSelectFavoriteList.SelectedItem as FavoriteList;
-
-            if (favoriteList != null)
+            if (cmbSelectFavoriteList.SelectedItem is FavoriteList favoriteList)
             {
-                bool addSongToFavoriteList = favoriteList.AddSongToFavoriteList(selectedSong);
+                FavoriteListService favoriteListService = new FavoriteListService(this.user);
 
-                if (addSongToFavoriteList == true)
+                ServiceStatusJob serviceStatusJob = favoriteListService.AddSongToFavoriteList(selectedSong, favoriteList);
+
+                if (serviceStatusJob.isSuccess == false)
                 {
-                    this.DialogResult = DialogResult.OK;
+                    MessageBox.Show(
+                    serviceStatusJob.messageText,
+                    serviceStatusJob.messageTitle,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                    );
                 }
                 else
                 {
-                    MessageBox.Show(
-                       $"Song has already been added to {favoriteList.name} list, select another list!",
-                       "Warning",
-                       MessageBoxButtons.OK,
-                       MessageBoxIcon.Warning
-                       );
+                    this.DialogResult = DialogResult.OK;
                 }
             }
         }

@@ -8,22 +8,25 @@ namespace Infrastructure.DTO
 {
     public class UserDTO
     {
-        public string username { get; private set; }
+        public int userId { get; private set; }
+        public string userName { get; private set; }
         public string password { get; private set; }
-        public int id { get; private set; }
 
-
-        public UserDTO(string userName, string password)
+        public UserDTO(int userId, string userName, string password)
         {
-            this.username = userName;
+            this.userId = userId;
+            this.userName = userName;
             this.password = password;
         }
 
-
-        public UserDTO(string userName, int id)
+        public UserDTO(string userName, string password)
         {
-            this.username = userName;
-            this.id = id;
+            this.userName = userName;
+        }
+
+        public UserDTO(int id)
+        {
+            this.userId = id;
         }
     }
 }

@@ -6,7 +6,13 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.DTO
 {
-    internal class ArtistDTO
+    public class ArtistDTO
     {
+        public string name { get; private set; }
+
+        public ArtistDTO(string name)
+        {
+            this.name = name;
+        }
     }
 }

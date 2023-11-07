@@ -12,12 +12,16 @@ namespace Infrastructure.DTO
         public string songName { get; private set; }
         public string songImage { get; private set; }
         public int songListened { get; private set; }
+        public GenreDTO genreDto { get; private set; }
+        public ArtistDTO artistDto { get; private set; }
        
-        public SongDTO(int songid , string songName, string songImage, int songListened) {
+        public SongDTO(int songid , string songName, string songImage, int songListened, GenreDTO genreDto, ArtistDTO artistDto) {
             this.songId = songid;
             this.songName = songName;
             this.songImage = songImage;
             this.songListened = songListened;
+            this.genreDto = genreDto;
+            this.artistDto = artistDto;
         }
 
         public SongDTO(int songid)

@@ -13,11 +13,10 @@ namespace Infrastructure
     {
         private DbConnect dbConnect = new DbConnect();
 
-        public IReadOnlyList<FavoriteListDTO> GetAllFavoriteListBaseOnUserId(int id)
+        public IReadOnlyList<FavoriteListDTO> GetAllFavoriteListBaseOnUser(UserDTO userDto)
         {
-
-            MySqlCommand cmd = dbConnect.executeQuery("SELECT * FROM favoritelist AS fl WHERE fl.owner=@id");
-            cmd.Parameters.AddWithValue("@id", id);
+            MySqlCommand cmd = dbConnect.executeQuery("SELECT * FROM favoritelist AS fl INNER JOIN user AS u WHERE u.userid = @userid AND fl.owner = u.userid ");
+            cmd.Parameters.AddWithValue("@userid", userDto.userId);
 
             List<FavoriteListDTO> listOfFavolistList = new List<FavoriteListDTO>();
 
@@ -38,13 +37,13 @@ namespace Infrastructure
 
         }
 
-        public bool AddNewFavoriteList(FavoriteListDTO favoriteListDto, int userId)
+        public bool AddNewFavoriteList(FavoriteListDTO favoriteListDto, UserDTO userDto)
         {
             try
             {
-                MySqlCommand cmd = dbConnect.executeQuery("INSERT INTO favoritelist (favoritelistname, owner) VALUES (@listname, @userid)");
-                cmd.Parameters.AddWithValue("@listname", favoriteListDto.name);
-                cmd.Parameters.AddWithValue("@userid", userId);
+                MySqlCommand cmd = dbConnect.executeQuery("INSERT INTO favoritelist (favoritelistname, owner) VALUES (@listName, @userId)");
+                cmd.Parameters.AddWithValue("@listName", favoriteListDto.name);
+                cmd.Parameters.AddWithValue("@userId", userDto.userId);
 
                 cmd.ExecuteNonQuery();
                 return true;

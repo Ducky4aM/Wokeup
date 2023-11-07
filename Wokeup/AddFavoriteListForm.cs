@@ -1,4 +1,6 @@
 ﻿using Domain;
+using Domain.Service;
+using Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -22,19 +24,26 @@ namespace Wokeup
 
         private void btnAddFavoriteList_Click(object sender, EventArgs e)
         {
-            bool isAddNewFavoriteList = user.CreateNewFavoriteList(txbAddFavoriteList.Text);
+            FavoriteListService favoriteListService = new FavoriteListService(this.user);
+            ServiceStatusJob statusMessage = favoriteListService.CreateFavoriteList(txbAddFavoriteList.Text);
 
-            if (isAddNewFavoriteList == false)
+            if (statusMessage.isSuccess == false)
             {
                 MessageBox.Show(
-                    $"Favorite list with name: {txbAddFavoriteList.Text} already exsit, please try other name!",
-                    "Warning",
+                    statusMessage.messageText,
+                    statusMessage.messageTitle,
                     MessageBoxButtons.OK,
                     MessageBoxIcon.Warning
                     );
             }
             else
             {
+                MessageBox.Show(
+                    statusMessage.messageText,
+                    statusMessage.messageTitle,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Information
+                    );
                 this.DialogResult = DialogResult.OK;
             }
         }

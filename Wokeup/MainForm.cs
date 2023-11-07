@@ -12,40 +12,44 @@ using Infrastructure;
 using Infrastructure.DTO;
 using Domain;
 using Org.BouncyCastle.Utilities;
+using Domain.Service;
 
 namespace Wokeup
 {
     public partial class MainForm : Form
     {
-        MusicApp musicApp;
+        SongService songService;
         User user;
         public MainForm(User user)
         {
             InitializeComponent();
             this.user = user;
-            this.musicApp = new MusicApp(user);
+            this.songService = new SongService();
         }
 
         private void MainForm_Load(object sender, EventArgs e)
         {
-            IReadOnlyList<Song> songs = (IReadOnlyList<Song>)musicApp.GetTopListenedSongs;
+            IReadOnlyList<Song> songs = this.songService.GetTopSongs();
 
             foreach (Song song in songs)
             {
                 Bitmap? image = LoadImageFromUrl(song.image);
-                dgvTopSong.Rows.Add(song, image, "artist");
+                dgvTopSong.Rows.Add(song, image, song.artist.name, song.genre.name);
             }
 
             DataGridViewImageColumn pic = new DataGridViewImageColumn();
             pic = (DataGridViewImageColumn)dgvTopSong.Columns[1];
             pic.ImageLayout = DataGridViewImageCellLayout.Stretch;
 
-            Load_Favorite_list();
+            LoadFavoritelistToListBox();
+            LoadGenreToComboBox(cmbFilterSong);
         }
 
-        private void Load_Favorite_list()
+        private void LoadFavoritelistToListBox()
         {
-            IReadOnlyList<FavoriteList> favoriteLists = this.user.GetUserFavoriteLists();
+            FavoriteListService favoriteListService = new FavoriteListService(this.user);
+            IReadOnlyList<FavoriteList> favoriteLists = favoriteListService.GetUserFavoriteLists();
+
             lsbFavoriteList.Items.Clear();
 
             foreach (FavoriteList favoriteList in favoriteLists)
@@ -54,14 +58,32 @@ namespace Wokeup
             }
         }
 
-        private void LoadSongFromFavorite(IReadOnlyList<Song> songs)
+        private void LoadGenreToComboBox(ComboBox comboBox)
         {
+            GenreService genreService = new GenreService();
+            IReadOnlyList<Genre> Genres = genreService.GetAllGenre();
+
+            foreach (Genre genre in Genres)
+            {
+                comboBox.Items.Add(genre);
+            }
+
+            comboBox.SelectedIndex = 0;
+        }
+
+        private void LoadSongFromFavoriteToDataTable(IReadOnlyList<Song>? songs)
+        {
+            if (songs == null)
+            {
+                return;
+            }
+
             dgvSongOfFavoriteList.Rows.Clear();
 
             foreach (Song song in songs)
             {
                 Bitmap? image = LoadImageFromUrl(song.image);
-                dgvSongOfFavoriteList.Rows.Add(song, image, "artist");
+                dgvSongOfFavoriteList.Rows.Add(song, image, song.artist.name);
             }
 
             DataGridViewImageColumn pic = new DataGridViewImageColumn();
@@ -103,7 +125,7 @@ namespace Wokeup
             AddFavoriteListFOrm f = new AddFavoriteListFOrm(this.user);
             f.ShowDialog();
             this.Visible = true;
-            Load_Favorite_list();
+            LoadFavoritelistToListBox();
         }
 
         private void btnRemoveFavoriteList_Click(object sender, EventArgs e)
@@ -119,15 +141,21 @@ namespace Wokeup
 
             if (result == DialogResult.OK)
             {
-                bool removeFavoriteList = this.user.RemoveFavoriteList(favoriteList);
+                FavoriteListService favoriteListService = new FavoriteListService(this.user);
+                ServiceStatusJob removeFavoriteListStatus = favoriteListService.RemoveFavoriteList(favoriteList);
 
-                if (removeFavoriteList == false)
+                if (removeFavoriteListStatus.isSuccess == false)
                 {
-                    MessageBox.Show("Can't remove favorite list, please try again later!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    MessageBox.Show(
+                        removeFavoriteListStatus.messageText,
+                        removeFavoriteListStatus.messageTitle,
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                        );
                 }
                 else
                 {
-                    Load_Favorite_list();
+                    LoadFavoritelistToListBox();
                     lsbFavoriteList.SelectedIndex = 0;
                 }
             }
@@ -139,12 +167,17 @@ namespace Wokeup
             if (lsbFavoriteList.SelectedIndex > -1)
             {
                 FavoriteList? favoriteList = lsbFavoriteList.SelectedItem as FavoriteList;
+                FavoriteListService favoriteListService = new FavoriteListService(this.user);
 
-                if (favoriteList != null)
+                ServiceStatusJob serviceStatusJob = favoriteListService.getSongsFromFavoriteList(favoriteList);
+
+                if (serviceStatusJob.isSuccess == false)
                 {
-                    IReadOnlyList<Song> favoriteListSongs = favoriteList.GetSongs();
-
-                    this.LoadSongFromFavorite(favoriteListSongs);
+                    MessageBox.Show(serviceStatusJob.messageText, serviceStatusJob.messageTitle, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                else
+                {
+                    this.LoadSongFromFavoriteToDataTable(favoriteList.GetSongs());
                 }
             }
         }
@@ -175,11 +208,11 @@ namespace Wokeup
             }
             if (selectedTabPage.Text == "My favorite")
             {
-                if(lsbFavoriteList.Items.Count > 0)
+                if (lsbFavoriteList.Items.Count > 0)
                 {
                     lsbFavoriteList.SelectedIndex = 0;
                     FavoriteList favoriteList = lsbFavoriteList.SelectedItem as FavoriteList;
-                    this.LoadSongFromFavorite(favoriteList.GetSongs());
+                    this.LoadSongFromFavoriteToDataTable(favoriteList.GetSongs());
                 }
             }
         }
@@ -190,17 +223,31 @@ namespace Wokeup
             {
                 if (lsbFavoriteList.SelectedItem is FavoriteList selectedFavoriteList)
                 {
-                    bool isRemoved = selectedFavoriteList.RemoveSongFromFavoriteList(dgvSongOfFavoriteList.SelectedRows[0].Cells[0].Value as Song);
+                    Song? song = dgvSongOfFavoriteList.SelectedRows[0].Cells[0].Value as Song;
+                    FavoriteListService favoriteListService = new FavoriteListService(this.user);
 
-                    if (isRemoved == true)
+                    ServiceStatusJob serviceStatusJob = favoriteListService.removeSongInFavoriteList(song, selectedFavoriteList);
+
+                    if (serviceStatusJob.isSuccess == false)
                     {
-                        this.LoadSongFromFavorite(selectedFavoriteList.GetSongs());
+                        MessageBox.Show(serviceStatusJob.messageText, serviceStatusJob.messageTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                     else
                     {
-                        MessageBox.Show("Can't remove song, try again later!", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                        this.LoadSongFromFavoriteToDataTable(selectedFavoriteList.GetSongs());
                     }
                 }
+            }
+        }
+
+        private void cmbFilterSong_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cmbFilterSong.SelectedIndex > 0)
+            {
+                Genre genre = cmbFilterSong.SelectedItem as Genre;
+                SongService songService = new SongService();
+
+                LoadSongFromFavoriteToDataTable(songService.GetSongsBaseOnGenre(genre));
             }
         }
     }

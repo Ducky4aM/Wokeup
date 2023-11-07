@@ -20,21 +20,14 @@ namespace Domain
 
         public Artist artist { get; private set; }
 
-        public Song(string name, string image, int listened)
+        public Song(int id, string name, string image, int listened, Genre genre, Artist artist)
         {
+            this.id = id;
             this.name= name;
             this.image = image;
             this.listened = listened;
-            //this.artist = artist;
-            //this.genre = genre;
-        }
-
-        public Song(int id,string name, string image, int listened)
-        {
-            this.id = id;
-            this.name = name;
-            this.image = image;
-            this.listened = listened;
+            this.genre = genre;
+            this.artist = artist;
         }
 
         public override string ToString()

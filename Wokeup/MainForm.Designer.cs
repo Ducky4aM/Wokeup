@@ -31,6 +31,9 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             tbcMain = new TabControl();
             tbpSonglist = new TabPage();
+            cmbFilterSong = new ComboBox();
+            lblSearchText = new Label();
+            txbSearchSong = new TextBox();
             pbDisplaySongImage = new PictureBox();
             dgvTopSong = new DataGridView();
             clmName = new DataGridViewTextBoxColumn();
@@ -70,6 +73,9 @@
             // 
             // tbpSonglist
             // 
+            tbpSonglist.Controls.Add(cmbFilterSong);
+            tbpSonglist.Controls.Add(lblSearchText);
+            tbpSonglist.Controls.Add(txbSearchSong);
             tbpSonglist.Controls.Add(pbDisplaySongImage);
             tbpSonglist.Controls.Add(dgvTopSong);
             tbpSonglist.Controls.Add(btnAddSongToFavoriteList);
@@ -78,8 +84,36 @@
             tbpSonglist.Padding = new Padding(3);
             tbpSonglist.Size = new Size(988, 485);
             tbpSonglist.TabIndex = 0;
-            tbpSonglist.Text = "Top song";
+            tbpSonglist.Text = "Home";
             tbpSonglist.UseVisualStyleBackColor = true;
+            // 
+            // cmbFilterSong
+            // 
+            cmbFilterSong.DropDownStyle = ComboBoxStyle.DropDownList;
+            cmbFilterSong.FormattingEnabled = true;
+            cmbFilterSong.Items.AddRange(new object[] { "Top song" });
+            cmbFilterSong.Location = new Point(6, 6);
+            cmbFilterSong.Name = "cmbFilterSong";
+            cmbFilterSong.Size = new Size(132, 23);
+            cmbFilterSong.TabIndex = 6;
+            cmbFilterSong.SelectedIndexChanged += cmbFilterSong_SelectedIndexChanged;
+            // 
+            // lblSearchText
+            // 
+            lblSearchText.AutoSize = true;
+            lblSearchText.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
+            lblSearchText.Location = new Point(230, 3);
+            lblSearchText.Name = "lblSearchText";
+            lblSearchText.Size = new Size(61, 21);
+            lblSearchText.TabIndex = 5;
+            lblSearchText.Text = "Search";
+            // 
+            // txbSearchSong
+            // 
+            txbSearchSong.Location = new Point(297, 3);
+            txbSearchSong.Name = "txbSearchSong";
+            txbSearchSong.Size = new Size(236, 23);
+            txbSearchSong.TabIndex = 4;
             // 
             // pbDisplaySongImage
             // 
@@ -277,6 +311,7 @@
             Load += MainForm_Load;
             tbcMain.ResumeLayout(false);
             tbpSonglist.ResumeLayout(false);
+            tbpSonglist.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pbDisplaySongImage).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvTopSong).EndInit();
             tbpFavoriteList.ResumeLayout(false);
@@ -307,5 +342,8 @@
         private DataGridViewImageColumn clmImage;
         private DataGridViewTextBoxColumn clmArtist;
         private DataGridViewTextBoxColumn clmTopSongGenre;
+        private Label lblSearchText;
+        private TextBox txbSearchSong;
+        private ComboBox cmbFilterSong;
     }
 }
