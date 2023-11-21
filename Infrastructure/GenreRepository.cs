@@ -18,18 +18,50 @@ namespace Infrastructure
             List<GenreDTO> genreList = new List<GenreDTO>();
             try
             {
-                MySqlCommand cmd = dbConnect.executeQuery("SELECT * FROM genre ORDER BY genrename ASC");
+                string querry = "SELECT * FROM genre ORDER BY genrename ASC";
+
+                using (MySqlCommand cmd = dbConnect.ExecuteCommand(querry))
                 using (MySqlDataReader reader = cmd.ExecuteReader())
                 {
                     while (reader.Read())
                     {
                         genreList.Add(
-                         new GenreDTO(reader.GetString(reader.GetOrdinal("genrename")))
+                            new GenreDTO(reader.GetString(reader.GetOrdinal("genrename")))
                         );
                     }
                 }
-
                 return genreList.AsReadOnly();
+ 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return genreList.AsReadOnly();
+            }
+        }
+
+        public IReadOnlyList<GenreDTO> GetUserPreferGenres(UserDTO userDto)
+        {
+            List<GenreDTO> genreList = new List<GenreDTO>();
+            try
+            {
+                string querry = "SELECT * FROM genre AS g INNER JOIN preferusergenre AS pug ON pug.genreid = g.genreid WHERE pug.userid = @userid";
+
+                using (MySqlCommand cmd = dbConnect.ExecuteCommand(querry))
+                {
+                    cmd.Parameters.AddWithValue("@userid", userDto.userId);
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+
+                        while (reader.Read())
+                        {
+                            genreList.Add(
+                                new GenreDTO(reader.GetString(reader.GetOrdinal("genrename")))
+                            );
+                        }
+                    }
+                    return genreList.AsReadOnly();
+                }
             }
             catch (Exception ex)
             {

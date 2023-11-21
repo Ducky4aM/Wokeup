@@ -11,48 +11,43 @@ namespace Infrastructure.Database
 {
     public class DbConnect
     {
-        public MySqlConnection connectMySql { get; private set; }
+        private string server;
+        private string port;
+        private string database;
+        private string Uid;
+        private string password;
 
-        private string server = "localhost";
-        private string port = "3306";
-        private string database = "wokeup";
-        private string Uid = "root";
-        private string password = "password";
+        public DbConnect(string server, string port, string database, string Uid, string password)
+        {
+            this.server = server;
+            this.port = port;
+            this.database = database;
+            this.Uid = Uid;
+            this.password = password;
+        }
 
-        public DbConnect()
+        public DbConnect(): this("localhost", "3306", "wokeup", "root", "password")
+        {
+        }
+
+        public MySqlConnection GetConnection()
         {
             string connectionString = $"Server={server};Port={port};Database={database};Uid={Uid};Pwd={password};";
-            connectMySql = new MySqlConnection(connectionString);
+            return new MySqlConnection(connectionString);
         }
 
-        public void ConnOpen()
+        public MySqlCommand ExecuteCommand(string query)
         {
-            if (connectMySql.State == ConnectionState.Closed)
-            {
-                connectMySql.Open();
-            }
-        }
+            MySqlConnection connection = GetConnection();
 
-        public void ConnClose()
-        {
-            if (connectMySql.State == ConnectionState.Open)
-            {
-                connectMySql.Close();
-            }
-        }
-
-        public MySqlCommand executeQuery(string query)
-        {
             try
             {
-                ConnOpen();
-                MySqlCommand cmd = new MySqlCommand(query ,connectMySql);
-
-                return cmd;
+                connection.Open();
+                return new MySqlCommand(query, connection);
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                throw new Exception("Error creating command: " + ex.Message);
             }
         }
     }

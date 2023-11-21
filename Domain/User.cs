@@ -1,4 +1,5 @@
-﻿using Domain.Service;
+﻿using Domain.Helper;
+using Domain.Service;
 using Infrastructure;
 using Infrastructure.DTO;
 using System;
@@ -11,25 +12,41 @@ namespace Domain
 {
     public class User
     {
-        public int id { get; set; }  
+        public int id { get; private set; }
+
         public string name { get; private set; }
+
         public string password { get; private set; }
 
         private List<FavoriteList> favoriteLists = new List<FavoriteList>();
+        
+        private List<Genre> preferGenres = new List<Genre>();
 
         public User(string name, string password)
         {
-            this.name = name;
+            if (this.NameValidator(name, new NullWhiteSpaceValidator()) == false)
+            {
+                throw new Exception("User name is not Valid");
+            }
+
+            this.name = name.Trim();
+
             this.password = password;
         }
 
         public User(int id, string name)
         {
+            if (this.NameValidator(name, new NullWhiteSpaceValidator()) == false)
+            {
+                throw new Exception("User name is not Valid");
+            }
+
+            this.name = name.Trim();
+
             this.id = id;
-            this.name = name;
         }
 
-        internal void RemoveFavoriteList(FavoriteList favoriteList)
+        public void RemoveFavoriteList(FavoriteList favoriteList)
         {
             if (this.favoriteLists.Contains(favoriteList))
             {
@@ -37,25 +54,43 @@ namespace Domain
             }
         }
 
-        internal void AddFavoriteList(FavoriteList favorite_list)
+        public bool AddFavoriteList(FavoriteList favorite_list)
         {
-            //hier better met bool returm type
-            if (this.favoriteLists.Any(favoritelist => favoritelist.name.Equals(favorite_list.name)))
+            if (this.favoriteLists.Any(item => item.name == favorite_list. name) == true)
             {
-                return;
+                return false;
             }
 
             this.favoriteLists.Add(favorite_list);
-        }
 
-        internal void UpdateFavoriteList(List<FavoriteList> favoriteLists)
-        {
-            this.favoriteLists = favoriteLists;
+            return true;
         }
 
         public IReadOnlyList<FavoriteList> GetFavoriteLists()
         {
             return this.favoriteLists.AsReadOnly();
+        }
+
+        private bool NameValidator(string name, IStringValidator validator)
+        {
+            return validator.Validate(name);
+        }
+
+        public bool AddPreferGenre(Genre genre)
+        {
+            if (this.preferGenres.Any(item => item.name == genre.name) == true)
+            {
+                return false;
+            }
+
+            this.preferGenres.Add(genre);
+
+            return true;
+        }
+
+        public IReadOnlyList<Genre> GetPreferGenres()
+        {
+            return this.preferGenres.AsReadOnly();
         }
     }
 }

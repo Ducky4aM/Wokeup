@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Domain.Service.Interface;
 
 namespace Domain.Service
 {
@@ -17,9 +18,9 @@ namespace Domain.Service
             this.SongRepository = new SongRepository();
         }
 
-        public IReadOnlyList<Song> GetTopSongs()
+        public IReadOnlyList<Song> GetTopListenedSongs()
         {
-            IReadOnlyList<SongDTO> listSongsDto = this.SongRepository.GetTopSongs();
+            IReadOnlyList<SongDTO> listSongsDto = this.SongRepository.GetTopListenedSongs();
             List<Song> songs = new List<Song>();
 
             foreach (SongDTO songDto in listSongsDto)
@@ -47,7 +48,8 @@ namespace Domain.Service
             foreach (SongDTO songDto in songsDto)
             {
                 songs.Add(
-                    new Song(songDto.songId,
+                    new Song(
+                    songDto.songId,
                     songDto.songName,
                     songDto.songImage,
                     songDto.songListened,
@@ -60,6 +62,9 @@ namespace Domain.Service
             return songs.AsReadOnly();
         }
 
-
+        public IReadOnlyList<Song> GetSongs(IGetSongs IGetsongs)
+        {
+            return IGetsongs.GetSongs();
+        }
     }
 }

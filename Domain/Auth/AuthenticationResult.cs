@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Auth
 {
-    public class AuthenicationResult
+    public class AuthenticationResult
     {
         public User? AuthenticatedUser { get; set; }
-        public ServiceStatusJob? AuthenticationStatus { get; set; }
+        public ServiceStatusResult? AuthenticationStatus { get; set; }
     }
 }

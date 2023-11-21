@@ -45,7 +45,7 @@ namespace Wokeup
             {
                 FavoriteListService favoriteListService = new FavoriteListService(this.user);
 
-                ServiceStatusJob serviceStatusJob = favoriteListService.AddSongToFavoriteList(selectedSong, favoriteList);
+                ServiceStatusResult serviceStatusJob = favoriteListService.AddSongToFavoriteList(selectedSong, favoriteList);
 
                 if (serviceStatusJob.isSuccess == false)
                 {

@@ -34,14 +34,15 @@
             lblUserName = new Label();
             lblPassword = new Label();
             lblWelcome = new Label();
+            btnOpenSignUp = new Button();
             SuspendLayout();
             // 
             // btnLogin
             // 
             btnLogin.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            btnLogin.Location = new Point(156, 208);
+            btnLogin.Location = new Point(156, 213);
             btnLogin.Name = "btnLogin";
-            btnLogin.Size = new Size(100, 35);
+            btnLogin.Size = new Size(93, 35);
             btnLogin.TabIndex = 0;
             btnLogin.Text = "Login";
             btnLogin.UseVisualStyleBackColor = true;
@@ -92,11 +93,23 @@
             lblWelcome.TabIndex = 3;
             lblWelcome.Text = "Welcome";
             // 
+            // btnOpenSignUp
+            // 
+            btnOpenSignUp.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            btnOpenSignUp.Location = new Point(256, 213);
+            btnOpenSignUp.Name = "btnOpenSignUp";
+            btnOpenSignUp.Size = new Size(80, 35);
+            btnOpenSignUp.TabIndex = 4;
+            btnOpenSignUp.Text = "Sign up";
+            btnOpenSignUp.UseVisualStyleBackColor = true;
+            btnOpenSignUp.Click += btnOpenSignUp_Click;
+            // 
             // frmLogin
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(451, 342);
+            Controls.Add(btnOpenSignUp);
             Controls.Add(lblPassword);
             Controls.Add(lblWelcome);
             Controls.Add(lblUserName);
@@ -118,5 +131,6 @@
         private Label lblUserName;
         private Label lblPassword;
         private Label lblWelcome;
+        private Button btnOpenSignUp;
     }
 }

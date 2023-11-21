@@ -10,6 +10,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Xml.Linq;
 
 namespace Wokeup
 {
@@ -24,28 +25,45 @@ namespace Wokeup
 
         private void btnAddFavoriteList_Click(object sender, EventArgs e)
         {
-            FavoriteListService favoriteListService = new FavoriteListService(this.user);
-            ServiceStatusJob statusMessage = favoriteListService.CreateFavoriteList(txbAddFavoriteList.Text);
+            // eerste fout checken.
+            // if(txbAddFavoriteList.Text == "") {message box + return}
 
-            if (statusMessage.isSuccess == false)
+            if (txbAddFavoriteList.Text != "")
             {
-                MessageBox.Show(
-                    statusMessage.messageText,
-                    statusMessage.messageTitle,
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                    );
+                FavoriteListService favoriteListService = new FavoriteListService(this.user);
+                ServiceStatusResult statusMessage = favoriteListService.CreateFavoriteList(txbAddFavoriteList.Text);
+
+                if (statusMessage.isSuccess == false)
+                {
+                    MessageBox.Show(
+                        statusMessage.messageText,
+                        statusMessage.messageTitle,
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Error
+                        );
+                }
+                // hier ook met isSuccess == true. niet met else
+                else
+                {
+                    MessageBox.Show(
+                        statusMessage.messageText,
+                        statusMessage.messageTitle,
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information
+                        );
+                    this.DialogResult = DialogResult.OK;
+                }
             }
             else
             {
                 MessageBox.Show(
-                    statusMessage.messageText,
-                    statusMessage.messageTitle,
+                    "field name can't be empty!",
+                    "Warnnig",
                     MessageBoxButtons.OK,
-                    MessageBoxIcon.Information
+                    MessageBoxIcon.Warning
                     );
-                this.DialogResult = DialogResult.OK;
             }
+
         }
 
         private void btnCancelAddFavoriteList_Click(object sender, EventArgs e)

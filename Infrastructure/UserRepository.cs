@@ -11,26 +11,33 @@ namespace Infrastructure
 {
     public class UserRepository
     {
-        private DbConnect dbConnect = new DbConnect();
-        public UserRepository(){}
+        private DbConnect dbConnect;
+
+        public UserRepository(){
+            this.dbConnect = new DbConnect();
+        }
 
         public UserDTO? FindUser(UserDTO userDto)
         {
-            MySqlCommand cmd = dbConnect.executeQuery("SELECT * FROM user WHERE username=@name");
-            cmd.Parameters.AddWithValue("@name", userDto.userName);
+            string querry = "SELECT * FROM user WHERE username=@name";
 
-            using (MySqlDataReader reader = cmd.ExecuteReader())
+            using (MySqlCommand cmd = dbConnect.ExecuteCommand(querry))
             {
-                while (reader.Read())
-                {
-                    return new UserDTO(
-                        reader.GetInt32(reader.GetOrdinal("userid")),
-                        reader.GetString(reader.GetOrdinal("username")),
-                        reader.GetString(reader.GetOrdinal("userpassword"))
-                        );
-                }
+                cmd.Parameters.AddWithValue("@name", userDto.userName);
 
-                return null;
+                using (MySqlDataReader reader = cmd.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        return new UserDTO(
+                            reader.GetInt32(reader.GetOrdinal("userid")),
+                            reader.GetString(reader.GetOrdinal("username")),
+                            reader.GetString(reader.GetOrdinal("userpassword"))
+                        );
+                    }
+
+                    return null;
+                }
             }
         }
     }
