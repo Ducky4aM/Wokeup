@@ -6,27 +6,27 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Domain.Service.Interface;
+using Infrastructure.Interface;
 
 namespace Domain.Service
 {
     public class SongService
     {
-        private SongRepository SongRepository;
+        private ISongRepository songRepository;
 
-        public SongService()
+        public SongService(ISongRepository songRepository)
         {
-            this.SongRepository = new SongRepository();
+            this.songRepository = songRepository;
         }
 
-        public IReadOnlyList<Song> GetTopListenedSongs()
+        public IReadOnlyList<Song> GetAllSongs()
         {
-            IReadOnlyList<SongDTO> listSongsDto = this.SongRepository.GetTopListenedSongs();
+            IReadOnlyList<SongDTO> listSongsDto = this.songRepository.GetAll();
             List<Song> songs = new List<Song>();
 
             foreach (SongDTO songDto in listSongsDto)
             {
                 Song song = new Song(
-                    songDto.songId, 
                     songDto.songName, 
                     songDto.songImage, 
                     songDto.songListened, 
@@ -40,16 +40,46 @@ namespace Domain.Service
             return songs.AsReadOnly();
         }
 
+        public IReadOnlyList<Song> GetSongsFromFavoriteList(IFavoriteList favoriteList)
+        {
+            FavoriteListDTO favoriteListDto = new FavoriteListDTO(favoriteList.name);
+            IReadOnlyList<SongDTO> songsDto = this.songRepository.GetSongFromFavoriteList(favoriteListDto);
+
+            foreach (SongDTO songDto in songsDto)
+            {
+                bool isAddedSong = favoriteList.AddSongToFavoriteList(
+                     new Song(
+                         songDto.songName,
+                         songDto.songImage,
+                         songDto.songListened,
+                         new Genre(songDto.genreDto.name),
+                         new Artist(songDto.artistDto.name)
+                         )
+                     );
+
+                if (isAddedSong == false)
+                {
+                    continue;
+                }
+            }
+
+            return favoriteList.GetSongs();
+        }
+
         public IReadOnlyList<Song> GetSongsBaseOnGenre(Genre genre)
         {
+            if (genre == null)
+            {
+                throw new ArgumentException("Genre is null");
+            }
+
             List<Song> songs = new List<Song>();
-            IReadOnlyList<SongDTO> songsDto = this.SongRepository.GetSongsBaseOnGenre(new GenreDTO(genre.name));
+            IReadOnlyList<SongDTO> songsDto = this.songRepository.GetSongsBaseOnGenre(new GenreDTO(genre.name));
 
             foreach (SongDTO songDto in songsDto)
             {
                 songs.Add(
                     new Song(
-                    songDto.songId,
                     songDto.songName,
                     songDto.songImage,
                     songDto.songListened,
@@ -60,11 +90,6 @@ namespace Domain.Service
 
 
             return songs.AsReadOnly();
-        }
-
-        public IReadOnlyList<Song> GetSongs(IGetSongs IGetsongs)
-        {
-            return IGetsongs.GetSongs();
         }
     }
 }

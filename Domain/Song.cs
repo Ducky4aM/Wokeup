@@ -9,12 +9,6 @@ namespace Domain
 {
     public class Song
     {
-        private int songId;
-        private string songName;
-        private int songListened;
-
-        public int id { get; private set; }
-
         public string name { get; private set; }
 
         public int listened { get; private set; }
@@ -25,10 +19,8 @@ namespace Domain
 
         public Artist artist { get; private set; }
 
-        public Song(int id, string name, string image, int listened, Genre genre, Artist artist)
+        public Song(string name, string image, int listened, Genre genre, Artist artist)
         {
-            this.id = id;
-
             if (this.nameValidator(name, new NullWhiteSpaceValidator()) == false)
             {
                 throw new Exception("Song name not valid");
@@ -41,13 +33,9 @@ namespace Domain
             this.artist = artist;
         }
 
-        public Song(int songId, string songName, int songListened, Genre genre, Artist artist)
+        public Song(string name)
         {
-            this.songId = songId;
-            this.songName = songName;
-            this.songListened = songListened;
-            this.genre = genre;
-            this.artist = artist;
+            this.name = name;
         }
 
         public override string ToString()

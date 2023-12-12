@@ -45,11 +45,11 @@ namespace Infrastructure
             List<GenreDTO> genreList = new List<GenreDTO>();
             try
             {
-                string querry = "SELECT * FROM genre AS g INNER JOIN preferusergenre AS pug ON pug.genreid = g.genreid WHERE pug.userid = @userid";
+                string querry = "SELECT * FROM genre AS g INNER JOIN userprefergenre AS pug ON pug.genreid = g.genreid WHERE pug.userid = (SELECT userid FROM user WHERE username = @username)";
 
                 using (MySqlCommand cmd = dbConnect.ExecuteCommand(querry))
                 {
-                    cmd.Parameters.AddWithValue("@userid", userDto.userId);
+                    cmd.Parameters.AddWithValue("@username", userDto.userName);
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
 

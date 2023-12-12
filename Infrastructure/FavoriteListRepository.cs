@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Database;
 using Infrastructure.DTO;
+using Infrastructure.Interface;
 using MySql.Data.MySqlClient;
 using System;
 using System.Collections.Generic;
@@ -9,7 +10,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure
 {
-    public class FavoriteListRepository
+    public class FavoriteListRepository : IFavoriteRepository
     {
         private DbConnect dbConnect = new DbConnect();
 
@@ -17,11 +18,11 @@ namespace Infrastructure
         {
             try
             {
-                string querry = "SELECT * FROM favoritelist AS fl INNER JOIN user AS u WHERE u.userid = @userid AND fl.owner = u.userid";
+                string query = "SELECT * FROM favoritelist AS fl INNER JOIN user AS u WHERE u.userid = (SELECT userid from user WHERE username = @username) AND fl.owner = u.userid";
 
-                using (MySqlCommand cmd = dbConnect.ExecuteCommand(querry))
+                using (MySqlCommand cmd = dbConnect.ExecuteCommand(query))
                 {
-                    cmd.Parameters.AddWithValue("@userid", userDto.userId);
+                    cmd.Parameters.AddWithValue("@username", userDto.userName);
 
                     List<FavoriteListDTO> listOfFavolistList = new List<FavoriteListDTO>();
 
@@ -31,7 +32,6 @@ namespace Infrastructure
                         {
                             listOfFavolistList.Add(
                              new FavoriteListDTO(
-                                    reader.GetInt32(reader.GetOrdinal("favoritelistid")),
                                     reader.GetString(reader.GetOrdinal("favoritelistname"))
                                  )
                             );
@@ -47,25 +47,25 @@ namespace Infrastructure
             }
         }
 
-        public FavoriteListDTO AddNewFavoriteList(FavoriteListDTO favoriteListDto, UserDTO userDto)
+        public bool AddNewFavoriteList(FavoriteListDTO favoriteListDto, UserDTO userDto)
         {
             try
             {
-                string querry = "INSERT INTO favoritelist (favoritelistname, owner) VALUES (@listName, @userId); SELECT LAST_INSERT_ID();";
+                string query = "INSERT INTO favoritelist (favoritelistname, owner) VALUES (@listName, (SELECT userid FROM user WHERE username = @username));";
 
-                using (MySqlCommand cmd = dbConnect.ExecuteCommand(querry))
+                using (MySqlCommand cmd = dbConnect.ExecuteCommand(query))
                 {
                     cmd.Parameters.AddWithValue("@listName", favoriteListDto.name);
-                    cmd.Parameters.AddWithValue("@userId", userDto.userId);
-
-                    int insertedId = Convert.ToInt32(cmd.ExecuteScalar());
-
-                    return new FavoriteListDTO(insertedId, favoriteListDto.name);
+                    cmd.Parameters.AddWithValue("@username", userDto.userName);
+                    cmd.ExecuteNonQuery();
                 }
+
+                return true;
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                Console.WriteLine(ex.Message);
+                return false;
             }
         }
 
@@ -73,11 +73,11 @@ namespace Infrastructure
         {
             try
             {
-                string querry = "DELETE FROM favoritelist WHERE favoritelistid = @id";
+                string query = "DELETE FROM favoritelist WHERE favoritelistid = (SELECT favoritelistid WHERE favoritelistname = @favoritelistname)";
 
-                using (MySqlCommand cmd = dbConnect.ExecuteCommand(querry))
+                using (MySqlCommand cmd = dbConnect.ExecuteCommand(query))
                 {
-                    cmd.Parameters.AddWithValue("@id", favoriteListDto.id);
+                    cmd.Parameters.AddWithValue("@favoritelistname", favoriteListDto.name);
 
                     cmd.ExecuteNonQuery();
                     return true;
@@ -85,7 +85,8 @@ namespace Infrastructure
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                Console.WriteLine(ex.Message);
+                return false;
             }
         }
 
@@ -93,12 +94,12 @@ namespace Infrastructure
         {
             try
             {
-                string querry = "INSERT INTO favoritelistsong (songid, favoritelistid) VALUES (@songid, @favoritelistid)";
+                string query = "INSERT INTO favoritelistsong(songid, favoritelistid) VALUES((SELECT songid FROM song WHERE songname = @songname), (SELECT favoritelistid FROM favoritelist WHERE favoritelistname = @favoritelistname))";
 
-                using (MySqlCommand cmd = dbConnect.ExecuteCommand(querry))
+                using (MySqlCommand cmd = dbConnect.ExecuteCommand(query))
                 {
-                    cmd.Parameters.AddWithValue("@songid", songDto.songId);
-                    cmd.Parameters.AddWithValue("@favoritelistid", favoriteListDto.id);
+                    cmd.Parameters.AddWithValue("@songname", songDto.songName);
+                    cmd.Parameters.AddWithValue("@favoritelistname", favoriteListDto.name);
                     cmd.ExecuteNonQuery();
 
                     return true;
@@ -111,16 +112,16 @@ namespace Infrastructure
             }
         }
 
-        public bool RemoveSongFomFavoriteList(SongDTO songDto, FavoriteListDTO favoriteListDto)
+        public bool RemoveSongInFavoriteList(SongDTO songDto, FavoriteListDTO favoriteListDto)
         {
             try
             {
-                string querry = "Delete FROM favoritelistsong WHERE songid = @songid AND favoritelistid = @favoritelistid";
+                string querry = "Delete FROM favoritelistsong WHERE songid = (SELECT songid FROM song WHERE songname = @songname) AND favoritelistid = (SELECT favoritelistid FROM favoritelist WHERE favoritelistname = @favoritelistname)";
 
                 using (MySqlCommand cmd = dbConnect.ExecuteCommand(querry))
                 {
-                    cmd.Parameters.AddWithValue("@songid", songDto.songId);
-                    cmd.Parameters.AddWithValue("@favoritelistid", favoriteListDto.id);
+                    cmd.Parameters.AddWithValue("@songname", songDto.songName);
+                    cmd.Parameters.AddWithValue("@favoritelistname", favoriteListDto.name);
                     cmd.ExecuteNonQuery();
                     
                     return true;
@@ -128,7 +129,8 @@ namespace Infrastructure
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                Console.WriteLine(ex.Message);
+                return false;
             }
         }
     }

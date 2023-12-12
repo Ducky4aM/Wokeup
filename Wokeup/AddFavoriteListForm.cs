@@ -25,45 +25,40 @@ namespace Wokeup
 
         private void btnAddFavoriteList_Click(object sender, EventArgs e)
         {
-            // eerste fout checken.
-            // if(txbAddFavoriteList.Text == "") {message box + return}
-
-            if (txbAddFavoriteList.Text != "")
-            {
-                FavoriteListService favoriteListService = new FavoriteListService(this.user);
-                ServiceStatusResult statusMessage = favoriteListService.CreateFavoriteList(txbAddFavoriteList.Text);
-
-                if (statusMessage.isSuccess == false)
-                {
-                    MessageBox.Show(
-                        statusMessage.messageText,
-                        statusMessage.messageTitle,
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Error
-                        );
-                }
-                // hier ook met isSuccess == true. niet met else
-                else
-                {
-                    MessageBox.Show(
-                        statusMessage.messageText,
-                        statusMessage.messageTitle,
-                        MessageBoxButtons.OK,
-                        MessageBoxIcon.Information
-                        );
-                    this.DialogResult = DialogResult.OK;
-                }
-            }
-            else
+            if (txbAddFavoriteList.Text == "")
             {
                 MessageBox.Show(
-                    "field name can't be empty!",
-                    "Warnnig",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                    );
+                   "field name can't be empty!",
+                   "Warnnig",
+                   MessageBoxButtons.OK,
+                   MessageBoxIcon.Warning
+                   );
+
+                return;
             }
 
+            FavoriteListService favoriteListService = new FavoriteListService(this.user, new FavoriteListRepository());
+            ServiceStatusResult statusMessage = favoriteListService.CreateFavoriteList(txbAddFavoriteList.Text);
+
+            if (statusMessage.isSuccess == false)
+            {
+                MessageBox.Show(
+                    statusMessage.messageText,
+                    statusMessage.messageTitle,
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error
+                    );
+
+                return;
+            }
+
+            MessageBox.Show(
+                statusMessage.messageText,
+                statusMessage.messageTitle,
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+                );
+            this.DialogResult = DialogResult.OK;
         }
 
         private void btnCancelAddFavoriteList_Click(object sender, EventArgs e)

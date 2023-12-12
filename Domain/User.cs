@@ -1,4 +1,5 @@
 ﻿using Domain.Helper;
+using Domain.Interface;
 using Domain.Service;
 using Infrastructure;
 using Infrastructure.DTO;
@@ -10,15 +11,13 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    public class User
+    public class User : IUser
     {
-        public int id { get; private set; }
-
         public string name { get; private set; }
 
         public string password { get; private set; }
 
-        private List<FavoriteList> favoriteLists = new List<FavoriteList>();
+        private List<IFavoriteList> favoriteLists = new List<IFavoriteList>();
         
         private List<Genre> preferGenres = new List<Genre>();
 
@@ -34,7 +33,7 @@ namespace Domain
             this.password = password;
         }
 
-        public User(int id, string name)
+        public User(string name)
         {
             if (this.NameValidator(name, new NullWhiteSpaceValidator()) == false)
             {
@@ -42,19 +41,21 @@ namespace Domain
             }
 
             this.name = name.Trim();
-
-            this.id = id;
         }
 
-        public void RemoveFavoriteList(FavoriteList favoriteList)
+        public bool RemoveFavoriteList(IFavoriteList favoriteList)
         {
-            if (this.favoriteLists.Contains(favoriteList))
+            if (this.favoriteLists.Contains(favoriteList) == false)
             {
-                this.favoriteLists.Remove(favoriteList);
+                return false;
             }
+
+            this.favoriteLists.Remove(favoriteList);
+
+            return true;
         }
 
-        public bool AddFavoriteList(FavoriteList favorite_list)
+        public bool AddFavoriteList(IFavoriteList favorite_list)
         {
             if (this.favoriteLists.Any(item => item.name == favorite_list. name) == true)
             {
@@ -66,7 +67,7 @@ namespace Domain
             return true;
         }
 
-        public IReadOnlyList<FavoriteList> GetFavoriteLists()
+        public IReadOnlyList<IFavoriteList> GetFavoriteLists()
         {
             return this.favoriteLists.AsReadOnly();
         }

@@ -1,14 +1,15 @@
 ﻿using Infrastructure.Database;
 using Infrastructure.DTO;
+using Infrastructure.Interface;
 using MySql.Data.MySqlClient;
 
 namespace Infrastructure
 {
-    public class SongRepository
+    public class SongRepository : ISongRepository
     {
         private DbConnect dbConnect = new DbConnect();
 
-        public IReadOnlyList<SongDTO> GetTopListenedSongs()
+        public IReadOnlyList<SongDTO> GetAll()
         {
             try
             {
@@ -16,8 +17,7 @@ namespace Infrastructure
                 INNER JOIN genre 
                 INNER JOIN artist as art 
                 ON so.genre = genre.genreid 
-                AND so.artistid = art.artistid 
-                ORDER BY so.songlistened DESC";
+                AND so.artistid = art.artistid";
 
                 List<SongDTO> listSongs = new List<SongDTO>();
 
@@ -28,7 +28,6 @@ namespace Infrastructure
                     {
                         listSongs.Add(
                             new SongDTO(
-                                reader.GetInt32(reader.GetOrdinal("songid")),
                                 reader.GetString(reader.GetOrdinal("songname")),
                                 reader.GetString(reader.GetOrdinal("songimage")),
                                 reader.GetInt32(reader.GetOrdinal("songlistened")),
@@ -57,13 +56,13 @@ namespace Infrastructure
                     INNER JOIN song AS s ON fvls.songid = s.songid 
                     INNER JOIN genre AS ge ON s.genre = ge.genreid 
                     INNER JOIN artist AS art ON s.artistid = art.artistid 
-                    WHERE fvl.favoritelistid = @id;";
+                    WHERE fvl.favoritelistid = (SELECT favoritelistid FROM favoritelist WHERE favoritelistname = @favoritelistname);";
 
                 List<SongDTO> listSongs = new List<SongDTO>();
 
                 using (MySqlCommand cmd = this.dbConnect.ExecuteCommand(query))
                 {
-                    cmd.Parameters.AddWithValue("@id", favoriteListDto.id);
+                    cmd.Parameters.AddWithValue("@favoritelistname", favoriteListDto.name);
 
                     using (MySqlDataReader reader = cmd.ExecuteReader())
                     {
@@ -71,7 +70,6 @@ namespace Infrastructure
                         {
                             listSongs.Add(
                                 new SongDTO(
-                                    reader.GetInt32(reader.GetOrdinal("songid")),
                                     reader.GetString(reader.GetOrdinal("songname")),
                                     reader.GetString(reader.GetOrdinal("songimage")),
                                     reader.GetInt32(reader.GetOrdinal("songlistened")),
@@ -112,7 +110,6 @@ namespace Infrastructure
                         {
                             listSongs.Add(
                                 new SongDTO(
-                                    reader.GetInt32(reader.GetOrdinal("songid")),
                                     reader.GetString(reader.GetOrdinal("songname")),
                                     reader.GetString(reader.GetOrdinal("songimage")),
                                     reader.GetInt32(reader.GetOrdinal("songlistened")),

@@ -1,6 +1,6 @@
 using Domain;
-using Domain.Auth;
 using Domain.Service;
+using Domain.Service.Auth;
 using Infrastructure;
 using Infrastructure.DTO;
 using MySql.Data.MySqlClient;
@@ -62,7 +62,7 @@ namespace Wokeup
                     User inlogedUser = authenicationResult.AuthenticatedUser;
                     MessageBox.Show($"Welcome {inlogedUser.name}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    GenreService genreService = new GenreService();
+                    GenreService genreService = new GenreService(new GenreRepository());
 
                     // if user nor choose a prefer genre yet, ask or user want to select a prefer gerne (optional)
                     if (genreService.GetUserPreferGenres(inlogedUser).Count == 0)
@@ -85,15 +85,9 @@ namespace Wokeup
                         }
                     }
 
-                    // if user already chose a prefer genre op main form and show songs list base on prefer genre
+                    // if user already chose a prefer genre open main form.
                     if (inlogedUser.GetPreferGenres().Count > 0)
-                    {
-                        MessageBox.Show(inlogedUser.GetPreferGenres().Count.ToString());
-                        foreach (Genre genre in inlogedUser.GetPreferGenres())
-                        {
-                            MessageBox.Show(genre.name);
-                        }
-                        
+                    {   
                         this.OpenMainForm(inlogedUser);
                     }
                 }

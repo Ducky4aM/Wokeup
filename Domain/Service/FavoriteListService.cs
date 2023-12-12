@@ -1,5 +1,7 @@
-﻿using Infrastructure;
+﻿using Domain.Interface;
+using Infrastructure;
 using Infrastructure.DTO;
+using Infrastructure.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,111 +13,86 @@ namespace Domain.Service
 {
     public class FavoriteListService
     {
-        private readonly FavoriteListRepository favoriteListRepository;
-        private readonly SongRepository songRepository;
-        private readonly User user;
+        private readonly IFavoriteRepository favoriteListRepository;
+        private readonly IUser user;
 
         //hier kunnen IUser kunnen aangeven
-        public FavoriteListService(User user)
+        public FavoriteListService(IUser user, IFavoriteRepository favoriteRepository)
         {
             this.user = user;
-            this.favoriteListRepository = new FavoriteListRepository();
-            this.songRepository = new SongRepository();
+            this.favoriteListRepository = favoriteRepository;
         }
 
         public ServiceStatusResult CreateFavoriteList(string name)
         {
-            try
+            bool isAddedSucces = this.user.AddFavoriteList(new FavoriteList(name));
+
+            if (isAddedSucces == false)
             {
-                //TODO: hier controleren of het wel al bestaat in de list (hier vragen )
-                //adding to database
-                //combinatie tussen user and favoritelist uniek.
-                //valideren nadat toegevoeg in databse
-                FavoriteListDTO newFavoriteListDto = this.favoriteListRepository.AddNewFavoriteList(new FavoriteListDTO(name), new UserDTO(this.user.id));
-
-                bool isAddedSucces = this.user.AddFavoriteList(new FavoriteList( newFavoriteListDto.name));
-
-                if (isAddedSucces == false)
-                {
-                    return ServiceStatusResult.Failure("Error", $"Favorite list with name: {name} already exsit, please try other name!");
-                }
-
-                //hier kunnen misshien ook static klass maken met static method
-                return ServiceStatusResult.Success("Succes", $"Created `{name}` list succesful!");
+                return ServiceStatusResult.Failure("Error", $"Favorite list with name: {name} already exsit, please try other name!");
             }
-            catch (Exception ex)
+
+            bool isAddedToDatabase = this.favoriteListRepository.AddNewFavoriteList(new FavoriteListDTO(name), new UserDTO(this.user.name));
+
+            if (isAddedToDatabase == false)
             {
-                return ServiceStatusResult.Failure("Error", ex.Message);
+                return ServiceStatusResult.Failure("Error", "Can't not added favorite list in database");
             }
+
+            return ServiceStatusResult.Success("Succes", $"Created `{name}` list succesful!");
         }
 
-        public ServiceStatusResult RemoveFavoriteList(FavoriteList favoriteList)
+        public ServiceStatusResult RemoveFavoriteList(IFavoriteList favoriteList)
         {
-            try
+            if (favoriteList == null)
             {
-                FavoriteListDTO favoriteListDTO = new FavoriteListDTO(favoriteList.id, favoriteList.name);
-                //remove in databse
-                bool isRemoved = this.favoriteListRepository.RemoveFavoriteList(favoriteListDTO);
-
-                if (isRemoved)
-                {
-                    user.RemoveFavoriteList(favoriteList);
-                }
-
-                return ServiceStatusResult.Success();
-            }
-            catch (Exception ex)
-            {
-                return ServiceStatusResult.Failure("Error", ex.Message);
-            }
-        }
-
-        public IReadOnlyList<FavoriteList> GetUserFavoriteLists()
-        {
-            IReadOnlyList<FavoriteListDTO> favoriteListsDto = this.favoriteListRepository.GetAllFavoriteListBaseOnUser(new UserDTO(user.id));
-
-            foreach (FavoriteListDTO favoriteListDto in favoriteListsDto)
-            {
-                this.user.AddFavoriteList(new FavoriteList(favoriteListDto.id, favoriteListDto.name));
+                throw new ArgumentException("Favorite list null");
             }
 
-            return user.GetFavoriteLists();
-        }
+            bool isRemoved = user.RemoveFavoriteList(favoriteList);
 
-        public ServiceStatusResult GetSongsFromFavoriteList(FavoriteList favoriteList)
-        {
-            FavoriteListDTO favoriteListDto = new FavoriteListDTO(favoriteList.id, favoriteList.name);
-            IReadOnlyList<SongDTO> songsDto = this.songRepository.GetSongFromFavoriteList(favoriteListDto);
-            List<Song> songs = new List<Song>();
-
-            foreach (SongDTO songDto in songsDto)
+            if (isRemoved == false)
             {
-                bool isAddedSong = favoriteList.AddSongToFavoriteList(
-                     new Song(
-                         songDto.songId,
-                         songDto.songName,
-                         songDto.songImage,
-                         songDto.songListened,
-                         new Genre(songDto.genreDto.name),
-                         new Artist(songDto.artistDto.name)
-                         )
-                     );
+                return ServiceStatusResult.Failure("Error", "Can't remove favorite list");
+            }
 
-                if (isAddedSong == false)
-                {
-                    continue;
-                }
+            FavoriteListDTO favoriteListDTO = new FavoriteListDTO(favoriteList.name);
+
+            bool isRemovedInDatabase = this.favoriteListRepository.RemoveFavoriteList(favoriteListDTO);
+            if (isRemovedInDatabase == false)
+            {
+                return ServiceStatusResult.Failure("Error", "Can't remove favorite list in database");
             }
 
             return ServiceStatusResult.Success();
         }
 
-        public ServiceStatusResult AddSongToFavoriteList(Song song, FavoriteList favoriteList)
+        public IReadOnlyList<IFavoriteList> GetUserFavoriteLists()
         {
-            SongDTO songDto = new SongDTO(song.id);
-            FavoriteListDTO favoriteListDto = new FavoriteListDTO(favoriteList.id, favoriteList.name);
+            IReadOnlyList<FavoriteListDTO> favoriteListsDto = this.favoriteListRepository.GetAllFavoriteListBaseOnUser(new UserDTO(user.name));
 
-            this.favoriteListRepository.AddSongTofavorietList(songDto, favoriteListDto);
+            foreach (FavoriteListDTO favoriteListDto in favoriteListsDto)
+            {
+                this.user.AddFavoriteList(new FavoriteList(favoriteListDto.name));
+            }
+
+            return user.GetFavoriteLists();
+        }
+
+        public ServiceStatusResult AddSongToFavoriteList(Song song, IFavoriteList favoriteList)
+        {
+            if (song == null)
+            {
+                throw new ArgumentException("Song is null");
+            }
+
+            if (favoriteList == null)
+            {
+                throw new ArgumentException("Favorite list is null");
+            }
+
+            SongDTO songDto = new SongDTO(song.name);
+            FavoriteListDTO favoriteListDto = new FavoriteListDTO(favoriteList.name);
 
             bool isSongAdded = favoriteList.AddSongToFavoriteList(song);
 
@@ -124,28 +101,41 @@ namespace Domain.Service
                 return ServiceStatusResult.Failure("Info", $"Song has already been added to {favoriteList.name} list, select another list!");
             }
 
+            bool isAddedToDatabase = this.favoriteListRepository.AddSongTofavorietList(songDto, favoriteListDto);
+            if (isAddedToDatabase == false)
+            {
+                return ServiceStatusResult.Failure("Error", "Can't not add song into favorite list in database");
+            }
+
             return ServiceStatusResult.Success();
         }
 
-        public ServiceStatusResult RemoveSongInFavoriteList(Song song, FavoriteList favoriteList)
+        public ServiceStatusResult RemoveSongInFavoriteList(Song song, IFavoriteList favoriteList)
         {
-            try
+            if (song == null)
             {
-                bool isRemoved = favoriteList.RemoveSongInFavoriteList(song);
-
-                if (isRemoved == false)
-                {
-                    return ServiceStatusResult.Failure("error", " removed as it does not exist in the favorite list.");
-                }
-
-                favoriteListRepository.RemoveSongFomFavoriteList(new SongDTO(song.id), new FavoriteListDTO(favoriteList.id, favoriteList.name));
-
-                return ServiceStatusResult.Success();
+                throw new ArgumentException("Song is null");
             }
-            catch (Exception ex)
+
+            if (favoriteList == null)
             {
-                return ServiceStatusResult.Failure("error", ex.Message);
+                throw new ArgumentException("Favorite list is null");
             }
+
+            bool isRemoved = favoriteList.RemoveSongInFavoriteList(song);
+
+            if (isRemoved == false)
+            {
+                return ServiceStatusResult.Failure("Error", "Removed song does not exist in the favorite list");
+            }
+
+            bool isRemoveInDatabase = favoriteListRepository.RemoveSongInFavoriteList(new SongDTO(song.name), new FavoriteListDTO(favoriteList.name));
+            if (isRemoveInDatabase == false)
+            {
+                return ServiceStatusResult.Failure("Error", "Can't remove song in favorite list in databse");
+            }
+
+            return ServiceStatusResult.Success();
         }
     }
 }

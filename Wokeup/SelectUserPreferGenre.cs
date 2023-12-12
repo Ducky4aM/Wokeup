@@ -1,5 +1,6 @@
 ﻿using Domain;
 using Domain.Service;
+using Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -24,28 +25,46 @@ namespace Wokeup
 
         private void frmSelectedFavoriteGenre_Load(object sender, EventArgs e)
         {
-            GenreService genreService = new GenreService();
+            GenreService genreService = new GenreService(new GenreRepository());
 
             IReadOnlyList<Genre> genres = genreService.GetAllGenre();
 
             foreach (Genre genre in genres)
             {
-                cmbSelectedPreferGenre.Items.Add(genre.ToString());
+                cmbSelectedPreferGenre.Items.Add(genre);
             }
         }
 
-        private void btnConfirmSelectedFavortieGenre_Click(object sender, EventArgs e)
-        {
-            
-        }
-
-        private void btnSkipSelectFavoriteGenre_Click(object sender, EventArgs e)
+        private void OpenMainForm()
         {
             this.Hide();
             MainForm mainForm = new MainForm(user);
             mainForm.TopMost = true;
             mainForm.ShowDialog();
             mainForm.Focus();
+        }
+
+        private void btnConfirmSelectedFavortieGenre_Click(object sender, EventArgs e)
+        {
+            UserService userService = new UserService(this.user);
+
+            if (cmbSelectedPreferGenre.SelectedItem is Genre selectedGenre)
+            {
+               ServiceStatusResult result = userService.setUserPreferGenre(selectedGenre);
+
+                if (result.isSuccess == false)
+                {
+                    MessageBox.Show(result.messageText, result.messageTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                OpenMainForm();
+            }
+        }
+
+        private void btnSkipSelectFavoriteGenre_Click(object sender, EventArgs e)
+        {
+            OpenMainForm();
         }
     }
 }

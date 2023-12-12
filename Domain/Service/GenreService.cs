@@ -12,9 +12,9 @@ namespace Domain.Service
     {
         private GenreRepository genreRepository;
 
-        public GenreService()
+        public GenreService(GenreRepository genreRepository)
         {
-           this.genreRepository = new GenreRepository();
+           this.genreRepository = genreRepository;
         }
 
         public IReadOnlyList<Genre> GetAllGenre()
@@ -32,23 +32,14 @@ namespace Domain.Service
 
         public IReadOnlyList<Genre> GetUserPreferGenres(User user)
         {
-            try
+            IReadOnlyList<GenreDTO> genreDtos = this.genreRepository.GetUserPreferGenres(new UserDTO(user.name));
+
+            foreach (GenreDTO genreDto in genreDtos)
             {
-                UserDTO userDto = new UserDTO(user.id);
-
-                IReadOnlyList<GenreDTO> genreDtos= this.genreRepository.GetUserPreferGenres(userDto);
-
-                foreach (GenreDTO genreDto in genreDtos)
-                {
-                    user.AddPreferGenre(new Genre(genreDto.name));
-                }
-
-                return user.GetPreferGenres();
+                user.AddPreferGenre(new Genre(genreDto.name));
             }
-            catch (Exception ex)
-            {
-                throw new Exception(ex.Message);
-            }
+
+            return user.GetPreferGenres();
         }
     }
 }

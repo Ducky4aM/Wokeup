@@ -10,24 +10,15 @@ using System.Threading.Tasks;
 
 namespace Domain
 {
-    public class FavoriteList
+    public class FavoriteList : IFavoriteList
     {
         public string name { get; private set; }
-
-        public int id { get; private set; }
 
         private List<Song> songs = new List<Song>();
 
         public FavoriteList(string name)
         {
             this.name = this.GetValidName(name, new NullWhiteSpaceValidator());
-        }
-
-        public FavoriteList(int id, string name)
-        {
-            this.name = this.GetValidName(name, new NullWhiteSpaceValidator());
-
-            this.id = id;
         }
 
         public IReadOnlyList<Song> GetSongs()
@@ -37,7 +28,7 @@ namespace Domain
 
         public bool AddSongToFavoriteList(Song song)
         {
-            if (this.songs.Any(songCheck => songCheck.id == song.id))
+            if (this.songs.Any(songCheck => songCheck.name == song.name))
             {
                 return false;
             }

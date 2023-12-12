@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Auth
+namespace Domain.Service.Auth
 {
     public class AuthenticationService
     {
@@ -29,7 +29,7 @@ namespace Domain.Auth
                     return new AuthenticationResult { AuthenticationStatus = ServiceStatusResult.Failure("Error", "Login failed. Invalid username or password!") };
                 }
 
-                return new AuthenticationResult { AuthenticatedUser = new User(InloggedUserDto.userId, InloggedUserDto.userName)};
+                return new AuthenticationResult { AuthenticatedUser = new User(InloggedUserDto.userName) };
             }
             catch (Exception ex)
             {

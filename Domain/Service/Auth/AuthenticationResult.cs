@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Auth
+namespace Domain.Service.Auth
 {
     public class AuthenticationResult
     {

@@ -31,6 +31,8 @@
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             tbcMain = new TabControl();
             tbpSonglist = new TabPage();
+            LblArtistForYouText = new Label();
+            dataGridView1 = new DataGridView();
             cmbFilterSong = new ComboBox();
             lblSearchText = new Label();
             txbSearchSong = new TextBox();
@@ -40,27 +42,27 @@
             clmImage = new DataGridViewImageColumn();
             clmArtist = new DataGridViewTextBoxColumn();
             clmTopSongGenre = new DataGridViewTextBoxColumn();
+            clmSongListened = new DataGridViewTextBoxColumn();
             btnAddSongToFavoriteList = new Button();
             tbpFavoriteList = new TabPage();
             lsbFavoriteList = new ListBox();
             dgvSongOfFavoriteList = new DataGridView();
             dataGridViewTextBoxColumn1 = new DataGridViewTextBoxColumn();
             dataGridViewImageColumn1 = new DataGridViewImageColumn();
+            clmdgwGenre = new DataGridViewTextBoxColumn();
             dataGridViewTextBoxColumn2 = new DataGridViewTextBoxColumn();
             clmDeleteSongFromFavoriteList = new DataGridViewButtonColumn();
             lblSongInFavoriteList = new Label();
             lblFavoriteList = new Label();
             btnRemoveFavoriteList = new Button();
             btnCreatFavoriteList = new Button();
-            dataGridView1 = new DataGridView();
-            LblArtistForYouText = new Label();
             tbcMain.SuspendLayout();
             tbpSonglist.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             ((System.ComponentModel.ISupportInitialize)pbDisplaySongImage).BeginInit();
             ((System.ComponentModel.ISupportInitialize)dgvMainSongTable).BeginInit();
             tbpFavoriteList.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)dgvSongOfFavoriteList).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).BeginInit();
             SuspendLayout();
             // 
             // tbcMain
@@ -70,7 +72,7 @@
             tbcMain.Location = new Point(2, 2);
             tbcMain.Name = "tbcMain";
             tbcMain.SelectedIndex = 0;
-            tbcMain.Size = new Size(996, 513);
+            tbcMain.Size = new Size(1068, 513);
             tbcMain.TabIndex = 0;
             tbcMain.SelectedIndexChanged += tbcMain_SelectedIndexChanged;
             // 
@@ -87,16 +89,35 @@
             tbpSonglist.Location = new Point(4, 24);
             tbpSonglist.Name = "tbpSonglist";
             tbpSonglist.Padding = new Padding(3);
-            tbpSonglist.Size = new Size(988, 485);
+            tbpSonglist.Size = new Size(1060, 485);
             tbpSonglist.TabIndex = 0;
             tbpSonglist.Text = "Home";
             tbpSonglist.UseVisualStyleBackColor = true;
+            // 
+            // LblArtistForYouText
+            // 
+            LblArtistForYouText.AutoSize = true;
+            LblArtistForYouText.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
+            LblArtistForYouText.Location = new Point(284, 91);
+            LblArtistForYouText.Name = "LblArtistForYouText";
+            LblArtistForYouText.Size = new Size(81, 15);
+            LblArtistForYouText.TabIndex = 8;
+            LblArtistForYouText.Text = "Artist for you";
+            // 
+            // dataGridView1
+            // 
+            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            dataGridView1.Location = new Point(284, 109);
+            dataGridView1.Name = "dataGridView1";
+            dataGridView1.RowTemplate.Height = 25;
+            dataGridView1.Size = new Size(509, 85);
+            dataGridView1.TabIndex = 7;
             // 
             // cmbFilterSong
             // 
             cmbFilterSong.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbFilterSong.FormattingEnabled = true;
-            cmbFilterSong.Items.AddRange(new object[] { "Top song" });
+            cmbFilterSong.Items.AddRange(new object[] { "Most listened" });
             cmbFilterSong.Location = new Point(6, 6);
             cmbFilterSong.Name = "cmbFilterSong";
             cmbFilterSong.Size = new Size(132, 23);
@@ -107,7 +128,7 @@
             // 
             lblSearchText.AutoSize = true;
             lblSearchText.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point);
-            lblSearchText.Location = new Point(230, 3);
+            lblSearchText.Location = new Point(327, 4);
             lblSearchText.Name = "lblSearchText";
             lblSearchText.Size = new Size(61, 21);
             lblSearchText.TabIndex = 5;
@@ -115,7 +136,7 @@
             // 
             // txbSearchSong
             // 
-            txbSearchSong.Location = new Point(297, 3);
+            txbSearchSong.Location = new Point(403, 3);
             txbSearchSong.Name = "txbSearchSong";
             txbSearchSong.Size = new Size(236, 23);
             txbSearchSong.TabIndex = 4;
@@ -124,7 +145,7 @@
             // 
             pbDisplaySongImage.BackgroundImage = (Image)resources.GetObject("pbDisplaySongImage.BackgroundImage");
             pbDisplaySongImage.BackgroundImageLayout = ImageLayout.Stretch;
-            pbDisplaySongImage.Location = new Point(727, 6);
+            pbDisplaySongImage.Location = new Point(799, 6);
             pbDisplaySongImage.Name = "pbDisplaySongImage";
             pbDisplaySongImage.Size = new Size(258, 188);
             pbDisplaySongImage.SizeMode = PictureBoxSizeMode.StretchImage;
@@ -138,13 +159,13 @@
             dgvMainSongTable.AllowUserToResizeColumns = false;
             dgvMainSongTable.AllowUserToResizeRows = false;
             dgvMainSongTable.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvMainSongTable.Columns.AddRange(new DataGridViewColumn[] { clmName, clmImage, clmArtist, clmTopSongGenre });
+            dgvMainSongTable.Columns.AddRange(new DataGridViewColumn[] { clmName, clmImage, clmArtist, clmTopSongGenre, clmSongListened });
             dgvMainSongTable.Location = new Point(0, 200);
             dgvMainSongTable.Name = "dgvMainSongTable";
             dgvMainSongTable.ReadOnly = true;
             dgvMainSongTable.RowTemplate.Height = 70;
             dgvMainSongTable.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvMainSongTable.Size = new Size(985, 282);
+            dgvMainSongTable.Size = new Size(1059, 282);
             dgvMainSongTable.TabIndex = 0;
             dgvMainSongTable.CellClick += dgvTopSong_CellClick;
             // 
@@ -179,6 +200,12 @@
             clmTopSongGenre.ReadOnly = true;
             clmTopSongGenre.Width = 180;
             // 
+            // clmSongListened
+            // 
+            clmSongListened.HeaderText = "Streams";
+            clmSongListened.Name = "clmSongListened";
+            clmSongListened.ReadOnly = true;
+            // 
             // btnAddSongToFavoriteList
             // 
             btnAddSongToFavoriteList.Font = new Font("Segoe UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point);
@@ -201,7 +228,7 @@
             tbpFavoriteList.Location = new Point(4, 24);
             tbpFavoriteList.Name = "tbpFavoriteList";
             tbpFavoriteList.Padding = new Padding(3);
-            tbpFavoriteList.Size = new Size(988, 485);
+            tbpFavoriteList.Size = new Size(1060, 485);
             tbpFavoriteList.TabIndex = 1;
             tbpFavoriteList.Text = "My favorite";
             tbpFavoriteList.UseVisualStyleBackColor = true;
@@ -223,13 +250,13 @@
             dgvSongOfFavoriteList.AllowUserToResizeColumns = false;
             dgvSongOfFavoriteList.AllowUserToResizeRows = false;
             dgvSongOfFavoriteList.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dgvSongOfFavoriteList.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewImageColumn1, dataGridViewTextBoxColumn2, clmDeleteSongFromFavoriteList });
+            dgvSongOfFavoriteList.Columns.AddRange(new DataGridViewColumn[] { dataGridViewTextBoxColumn1, dataGridViewImageColumn1, clmdgwGenre, dataGridViewTextBoxColumn2, clmDeleteSongFromFavoriteList });
             dgvSongOfFavoriteList.Location = new Point(194, 57);
             dgvSongOfFavoriteList.Name = "dgvSongOfFavoriteList";
             dgvSongOfFavoriteList.ReadOnly = true;
             dgvSongOfFavoriteList.RowTemplate.Height = 70;
             dgvSongOfFavoriteList.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            dgvSongOfFavoriteList.Size = new Size(795, 422);
+            dgvSongOfFavoriteList.Size = new Size(863, 422);
             dgvSongOfFavoriteList.TabIndex = 3;
             dgvSongOfFavoriteList.CellClick += dgvSongOfFavoriteList_CellClick;
             // 
@@ -248,6 +275,12 @@
             dataGridViewImageColumn1.Name = "dataGridViewImageColumn1";
             dataGridViewImageColumn1.ReadOnly = true;
             dataGridViewImageColumn1.Width = 130;
+            // 
+            // clmdgwGenre
+            // 
+            clmdgwGenre.HeaderText = "Genre";
+            clmdgwGenre.Name = "clmdgwGenre";
+            clmdgwGenre.ReadOnly = true;
             // 
             // dataGridViewTextBoxColumn2
             // 
@@ -305,30 +338,11 @@
             btnCreatFavoriteList.UseVisualStyleBackColor = true;
             btnCreatFavoriteList.Click += btnCreatFavoriteList_Click;
             // 
-            // dataGridView1
-            // 
-            dataGridView1.ColumnHeadersHeightSizeMode = DataGridViewColumnHeadersHeightSizeMode.AutoSize;
-            dataGridView1.Location = new Point(212, 109);
-            dataGridView1.Name = "dataGridView1";
-            dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.Size = new Size(509, 85);
-            dataGridView1.TabIndex = 7;
-            // 
-            // LblArtistForYouText
-            // 
-            LblArtistForYouText.AutoSize = true;
-            LblArtistForYouText.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            LblArtistForYouText.Location = new Point(212, 91);
-            LblArtistForYouText.Name = "LblArtistForYouText";
-            LblArtistForYouText.Size = new Size(81, 15);
-            LblArtistForYouText.TabIndex = 8;
-            LblArtistForYouText.Text = "Artist for you";
-            // 
             // MainForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(995, 518);
+            ClientSize = new Size(1067, 518);
             Controls.Add(tbcMain);
             Name = "MainForm";
             Text = "Wokeup";
@@ -336,12 +350,12 @@
             tbcMain.ResumeLayout(false);
             tbpSonglist.ResumeLayout(false);
             tbpSonglist.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ((System.ComponentModel.ISupportInitialize)pbDisplaySongImage).EndInit();
             ((System.ComponentModel.ISupportInitialize)dgvMainSongTable).EndInit();
             tbpFavoriteList.ResumeLayout(false);
             tbpFavoriteList.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)dgvSongOfFavoriteList).EndInit();
-            ((System.ComponentModel.ISupportInitialize)dataGridView1).EndInit();
             ResumeLayout(false);
         }
 
@@ -359,10 +373,6 @@
         private Label lblFavoriteList;
         private DataGridView dgvSongOfFavoriteList;
         private ListBox lsbFavoriteList;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
-        private DataGridViewImageColumn dataGridViewImageColumn1;
-        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private DataGridViewButtonColumn clmDeleteSongFromFavoriteList;
         private DataGridViewTextBoxColumn clmName;
         private DataGridViewImageColumn clmImage;
         private DataGridViewTextBoxColumn clmArtist;
@@ -372,5 +382,11 @@
         private ComboBox cmbFilterSong;
         private Label LblArtistForYouText;
         private DataGridView dataGridView1;
+        private DataGridViewTextBoxColumn clmSongListened;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private DataGridViewImageColumn dataGridViewImageColumn1;
+        private DataGridViewTextBoxColumn clmdgwGenre;
+        private DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private DataGridViewButtonColumn clmDeleteSongFromFavoriteList;
     }
 }

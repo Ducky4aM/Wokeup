@@ -27,6 +27,11 @@ namespace Domain.Service
             return new ServiceStatusResult(false, messageTile, message);
         }
 
+        public static ServiceStatusResult Failure()
+        {
+            return new ServiceStatusResult(false, string.Empty, string.Empty);
+        }
+
         public static ServiceStatusResult Success()
         {
             return new ServiceStatusResult(true, string.Empty, string.Empty);

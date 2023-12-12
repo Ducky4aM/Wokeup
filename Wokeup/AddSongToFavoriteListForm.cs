@@ -1,5 +1,7 @@
 ﻿using Domain;
+using Domain.Interface;
 using Domain.Service;
+using Infrastructure;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -14,7 +16,7 @@ namespace Wokeup
 {
     public partial class AddSongToFavoriteListForm : Form
     {
-        User user;
+        IUser user;
         Song selectedSong;
         Bitmap songImage;
         public AddSongToFavoriteListForm(User user, Song selectedSong, Bitmap songImage)
@@ -31,7 +33,7 @@ namespace Wokeup
             lblSongTitle.Text = selectedSong.ToString();
             pcbAddSongToFavoriteList.Image = this.songImage;
 
-            IReadOnlyList<FavoriteList> favoriteLists = user.GetFavoriteLists();
+            IReadOnlyList<IFavoriteList> favoriteLists = user.GetFavoriteLists();
 
             foreach (FavoriteList favoriteList in favoriteLists)
             {
@@ -43,7 +45,7 @@ namespace Wokeup
         {
             if (cmbSelectFavoriteList.SelectedItem is FavoriteList favoriteList)
             {
-                FavoriteListService favoriteListService = new FavoriteListService(this.user);
+                FavoriteListService favoriteListService = new FavoriteListService(this.user, new FavoriteListRepository());
 
                 ServiceStatusResult serviceStatusJob = favoriteListService.AddSongToFavoriteList(selectedSong, favoriteList);
 
