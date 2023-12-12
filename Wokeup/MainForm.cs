@@ -15,6 +15,7 @@ using Org.BouncyCastle.Utilities;
 using Domain.Service;
 using Domain.Service.Interface;
 using Domain.Factory;
+using Domain.Interface;
 
 namespace Wokeup
 {

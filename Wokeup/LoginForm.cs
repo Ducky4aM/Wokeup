@@ -14,11 +14,6 @@ namespace Wokeup
             InitializeComponent();
         }
 
-        private void frmLogin_Load(object sender, EventArgs e)
-        {
-
-        }
-
         private void OpenMainForm(User user)
         {
             this.Hide();
@@ -45,8 +40,8 @@ namespace Wokeup
             }
             else
             {
-                AuthenticationService authentication = new AuthenticationService();
-                AuthenticationResult authenicationResult = authentication.AuthUser(txbUsername.Text, txbPassword.Text);
+                AuthenticationService authentication = new AuthenticationService(new UserRepository());
+                AuthenticationResult authenicationResult = authentication.AuthUser(new User(txbUsername.Text, txbPassword.Text));
 
                 if (authenicationResult.AuthenticationStatus != null)
                 {
@@ -62,10 +57,8 @@ namespace Wokeup
                     User inlogedUser = authenicationResult.AuthenticatedUser;
                     MessageBox.Show($"Welcome {inlogedUser.name}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                    GenreService genreService = new GenreService(new GenreRepository());
-
                     // if user nor choose a prefer genre yet, ask or user want to select a prefer gerne (optional)
-                    if (genreService.GetUserPreferGenres(inlogedUser).Count == 0)
+                    if (inlogedUser.GetPreferGenres().Count == 0)
                     {
                         DialogResult msbPreferGenreResult = MessageBox.Show(
                         "It look like you not selected prefer genre yet! do you want to select a genre ?",
