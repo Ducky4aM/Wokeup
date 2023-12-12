@@ -5,6 +5,7 @@ using Infrastructure;
 using Infrastructure.DTO;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -30,7 +31,22 @@ namespace Domain
 
             this.name = name.Trim();
 
+            if (this.PasswordValidator(password, new NullWhiteSpaceValidator()) == false)
+            {
+                throw new Exception("Invalid Password");
+            }
             this.password = password;
+        }
+
+        public User(string name, Genre genre)
+        {
+            if (this.NameValidator(name, new NullWhiteSpaceValidator()) == false)
+            {
+                throw new Exception("User name is not Valid");
+            }
+
+            this.name = name.Trim();
+            this.preferGenres.Add(genre);
         }
 
         public User(string name)
@@ -75,6 +91,11 @@ namespace Domain
         private bool NameValidator(string name, IStringValidator validator)
         {
             return validator.Validate(name);
+        }
+
+        private bool PasswordValidator(string password, IStringValidator validator)
+        {
+            return validator.Validate(password);
         }
 
         public bool AddPreferGenre(Genre genre)

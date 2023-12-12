@@ -1,4 +1,5 @@
-﻿using Infrastructure;
+﻿using Domain.Interface;
+using Infrastructure;
 using Infrastructure.DTO;
 using Org.BouncyCastle.Utilities;
 using System;
@@ -11,7 +12,15 @@ namespace Domain.Service
 {
     public class UserService
     {
-        User user;
+        private User user;
+
+        private UserRepository userRepository;
+
+        public UserService(User user, UserRepository userRepository)
+        {
+            this.user = user;
+            this.userRepository = userRepository;
+        }
 
         public UserService(User user)
         {
@@ -28,8 +37,6 @@ namespace Domain.Service
                 {
                     return ServiceStatusResult.Failure();
                 }
-
-                UserRepository userRepository = new UserRepository();
 
                 userRepository.SetUserPreferGenre(new UserDTO(this.user.name), new GenreDTO(genre.name));
 
@@ -64,6 +71,7 @@ namespace Domain.Service
         public List<Genre> getSuggestGenreForUser()
         {
             List<Genre> genres = user.GetPreferGenres().ToList();
+
             List<IFavoriteList> favoriteLists = user.GetFavoriteLists().ToList();
             List<Song> allSong = new List<Song>();
 

@@ -29,17 +29,5 @@ namespace Domain.Service
 
             return genres.AsReadOnly();
         }
-
-        public IReadOnlyList<Genre> GetUserPreferGenres(User user)
-        {
-            IReadOnlyList<GenreDTO> genreDtos = this.genreRepository.GetUserPreferGenres(new UserDTO(user.name));
-
-            foreach (GenreDTO genreDto in genreDtos)
-            {
-                user.AddPreferGenre(new Genre(genreDto.name));
-            }
-
-            return user.GetPreferGenres();
-        }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Domain.Service.Interface;
+﻿using Domain.Interface;
+using Domain.Service.Interface;
 using Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace Domain.Service
             songs = songService.GetAllSongs().ToList();
         }
 
-        public IReadOnlyList<Song> GetSuggestSongs(User user, IGetSongsStrategy SongsStrategy)
+        public IReadOnlyList<Song> GetSuggestSongs(IUser user, IGetSongsStrategy SongsStrategy)
         {
             return SongsStrategy.GetSongs(user, songs);
         }

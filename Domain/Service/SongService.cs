@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Domain.Service.Interface;
 using Infrastructure.Interface;
+using Domain.Interface;
 
 namespace Domain.Service
 {

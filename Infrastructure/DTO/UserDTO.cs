@@ -10,16 +10,19 @@ namespace Infrastructure.DTO
     {
         public string userName { get; private set; }
         public string password { get; private set; }
+        public GenreDTO preferGenre { get; private set; }
 
-        public UserDTO(int userId, string userName, string password)
+        public UserDTO(string userName, string password, GenreDTO genreDto)
         {
             this.userName = userName;
             this.password = password;
+            this.preferGenre = genreDto;
         }
 
         public UserDTO(string userName, string password)
         {
             this.userName = userName;
+            this.password = password;
         }
 
         public UserDTO(string name)
