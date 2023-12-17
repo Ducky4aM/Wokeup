@@ -13,9 +13,9 @@ namespace Domain.Service
     {
         private List<Song> songs = new List<Song>();
 
-        private SongService songService;
+        private ISongService songService;
 
-        public SuggestSongs(SongService songService) 
+        public SuggestSongs(ISongService songService) 
         { 
             this.songService = songService;
             songs = songService.GetAllSongs().ToList();

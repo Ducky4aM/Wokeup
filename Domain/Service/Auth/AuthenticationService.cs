@@ -1,4 +1,5 @@
-﻿using Domain.Service;
+﻿using Domain.Interface;
+using Domain.Service;
 using Infrastructure;
 using Infrastructure.DTO;
 using System;
@@ -18,7 +19,7 @@ namespace Domain.Service.Auth
             this.userRepository = userRepository;
         }
 
-        public AuthenticationResult AuthUser(User user)
+        public AuthenticationResult AuthUser(IUser user)
         {
             try
             {
@@ -47,7 +48,7 @@ namespace Domain.Service.Auth
             }
         }
 
-        public ServiceStatusResult createAccount(User user)
+        public ServiceStatusResult createAccount(IUser user)
         {
             UserDTO userDto = new UserDTO(user.name, user.password);
 

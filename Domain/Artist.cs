@@ -17,22 +17,12 @@ namespace Domain
 
         public Artist(string name)
         {
-            if (this.NameValidator(name, new NullWhiteSpaceValidator()) == false)
-            {
-                throw new Exception("Artist name is not valid!");
-            }
-              
-            this.name = name.Trim();
+            this.name = name;
         }
 
         public IReadOnlyList<Genre> GetGenres()
         {
             return this.genres.AsReadOnly();
-        }
-
-        private bool NameValidator(string name, IStringValidator validator)
-        {
-            return validator.Validate(name);
         }
     }
 }

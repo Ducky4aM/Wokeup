@@ -8,9 +8,9 @@ namespace Infrastructure.DTO
 {
     public class GenreDTO
     {
-        public string? name { get; set; }
+        public string name { get; set; }
 
-        public GenreDTO(string? name) { 
+        public GenreDTO(string name) { 
             this.name = name;
         }
     }

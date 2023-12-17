@@ -9,17 +9,13 @@ namespace Domain.Interface
 {
     public interface IUser
     {
-        string name { get; }
+  string name { get; }
         string password { get; }
 
-        bool RemoveFavoriteList(IFavoriteList favoriteList);
-
         bool AddFavoriteList(IFavoriteList favorite_list);
-
         IReadOnlyList<IFavoriteList> GetFavoriteLists();
-
-        bool AddPreferGenre(Genre genre);
-
-        IReadOnlyList<Genre> GetPreferGenres();
+        Genre GetPreferGenre();
+        bool RemoveFavoriteList(IFavoriteList favoriteList);
+        bool SetPreferGenre(Genre genre);
     }
 }

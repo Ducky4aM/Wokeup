@@ -1,5 +1,6 @@
 ﻿using Infrastructure.Database;
 using Infrastructure.DTO;
+using Infrastructure.Interface;
 using MySql.Data.MySqlClient;
 using Org.BouncyCastle.Utilities.Collections;
 using System;
@@ -10,17 +11,18 @@ using System.Threading.Tasks;
 
 namespace Infrastructure
 {
-    public class UserRepository
+    public class UserRepository : IUserRepository
     {
         private DbConnect dbConnect;
 
-        public UserRepository(){
+        public UserRepository()
+        {
             this.dbConnect = new DbConnect();
         }
 
         public UserDTO? FindUser(UserDTO userDto)
         {
-            string query = "SELECT * FROM user as u LEFT JOIN genre as g ON u.prefegenreid = g.genreid WHERE username=@name AND userpassword=@password";
+            string query = "SELECT * FROM user as u LEFT JOIN genre as g ON u.prefergenreid = g.genreid WHERE username=@name AND userpassword=@password";
 
             using (MySqlCommand cmd = dbConnect.ExecuteCommand(query))
             {
@@ -51,11 +53,11 @@ namespace Infrastructure
             }
         }
 
-        public void SetUserPreferGenre(UserDTO userDto, GenreDTO genreDto)
+        public bool SetUserPreferGenre(UserDTO userDto, GenreDTO genreDto)
         {
             try
             {
-                string query = "UPDATE user SET prefergenreid = (SELECT genreid FROM genre WHERE genrename = @genrename) WHERE username = @username";
+                string query = "UPDATE user SET prefergenreid  = (SELECT genreid FROM genre WHERE genrename = @genrename) WHERE username = @username";
 
                 using (MySqlCommand cmd = dbConnect.ExecuteCommand(query))
                 {
@@ -63,10 +65,14 @@ namespace Infrastructure
                     cmd.Parameters.AddWithValue("@genrename", genreDto.name);
                     cmd.ExecuteNonQuery();
                 }
+
+                return true;
             }
             catch (Exception ex)
             {
-                throw new Exception(ex.Message);
+                Console.WriteLine(ex.Message);
+
+                return false;
             }
         }
 

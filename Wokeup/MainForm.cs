@@ -21,7 +21,7 @@ namespace Wokeup
 {
     public partial class MainForm : Form
     {
-        private SongService songService;
+        private ISongService songService;
         private FavoriteListService favoriteListService;
         private User user;
 
@@ -29,6 +29,7 @@ namespace Wokeup
         {
             InitializeComponent();
             this.user = user;
+            // hier IsongRepository , FavoriteListRepository ipv song repository
             this.songService = new SongService(new SongRepository());
             this.favoriteListService = new FavoriteListService(user, new FavoriteListRepository());
         }
@@ -40,8 +41,7 @@ namespace Wokeup
 
             SuggestSongs suggestSongs = new SuggestSongs(songService);
 
-            //Todo: hier voeg user service toe aan get strategy.
-            IReadOnlyList<Song> songs = suggestSongs.GetSuggestSongs(this.user, GetSuggestSongsFactory.GetStrategy(this.user,new UserService(user)));
+            IReadOnlyList<Song> songs = suggestSongs.GetSuggestSongs(this.user, GetSuggestSongsFactory.GetStrategy(this.user, new UserService(user)));
             LoadMainSongTable(songs);
         }
 
@@ -51,7 +51,7 @@ namespace Wokeup
             foreach (Song song in songs)
             {
                 Bitmap? image = LoadImageFromUrl(song.image);
-                dgvMainSongTable.Rows.Add(song, image, song.artist.name, song.genre.name, song.listened);
+                dgvMainSongTable.Rows.Add(song, image, song.artist.name, song.genre.name, song.listened, song.releaseAt.ToString("dd-MM-yyyy"));
             }
 
             DataGridViewImageColumn pic = new DataGridViewImageColumn();

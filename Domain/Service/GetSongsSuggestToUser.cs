@@ -11,9 +11,9 @@ namespace Domain.Service
 {
     public class GetSongsSuggestToUser : IGetSongsStrategy
     {
-        private UserService userService;
+        private IUserService userService;
 
-        public GetSongsSuggestToUser(UserService userService)
+        public GetSongsSuggestToUser(IUserService userService)
         {
             this.userService = userService;
         }
@@ -22,8 +22,15 @@ namespace Domain.Service
         {
             List<Genre> genres = this.userService.getSuggestGenreForUser();
 
-            songs.Sort(new SortSongsSuggest(genres));
+            List<IComparer<Song>> test = new List<IComparer<Song>>() {
+                new SongGenreComparer(genres),
+                new SongReleaseDateComparer(),
+                new SongListenedComparer(),
+            };
 
+            SongSortingManager sortingManager = new SongSortingManager(test);
+
+            songs.Sort(sortingManager);
             return songs.AsReadOnly();
         }
     }

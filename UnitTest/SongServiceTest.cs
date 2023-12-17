@@ -15,10 +15,10 @@ namespace UnitTest
         public void GetAllSongThatReturnAllsongs()
         {
             List<SongDTO> songDto = new List<SongDTO>(){
-                new SongDTO("Song1", "SongImage1", 100, new GenreDTO("Hiphop"), new ArtistDTO("ArtistName1")),
-                new SongDTO("Song2", "SongImage2", 100, new GenreDTO("Rap"), new ArtistDTO("ArtistName2")),
-                new SongDTO("Song3", "SongImage3", 100, new GenreDTO("Dance"), new ArtistDTO("ArtistName3")),
-                new SongDTO("Song4", "SongImage4", 100, new GenreDTO("Hiphop"), new ArtistDTO("ArtistName1")),
+                new SongDTO("Song1", "SongImage1", 100, new GenreDTO("Hiphop"), new ArtistDTO("ArtistName1"),new DateTime()),
+                new SongDTO("Song2", "SongImage2", 100, new GenreDTO("Rap"), new ArtistDTO("ArtistName2"), new DateTime()),
+                new SongDTO("Song3", "SongImage3", 100, new GenreDTO("Dance"), new ArtistDTO("ArtistName3"), new DateTime()),
+                new SongDTO("Song4", "SongImage4", 100, new GenreDTO("Hiphop"), new ArtistDTO("ArtistName1"), new DateTime()),
             };
 
             //Arrange
@@ -55,10 +55,10 @@ namespace UnitTest
         public void GetSongsBasOnGenreThatReurnAListOfSongWithGenreHipHop()
         {
             List<SongDTO> songDtos = new List<SongDTO>(){
-                new SongDTO("Song1", "SongImage1", 100, new GenreDTO("Hiphop"), new ArtistDTO("ArtistName1")),
-                new SongDTO("Song2", "SongImage2", 100, new GenreDTO("Hiphop"), new ArtistDTO("ArtistName2")),
-                new SongDTO("Song3", "SongImage3", 100, new GenreDTO("Hiphop"), new ArtistDTO("ArtistName3")),
-                new SongDTO("Song4", "SongImage4", 100, new GenreDTO("Hiphop"), new ArtistDTO("ArtistName1")),
+                new SongDTO("Song1", "SongImage1", 100, new GenreDTO("Hiphop"), new ArtistDTO("ArtistName1"),new DateTime()),
+                new SongDTO("Song2", "SongImage2", 100, new GenreDTO("Hiphop"), new ArtistDTO("ArtistName2"),new DateTime()),
+                new SongDTO("Song3", "SongImage3", 100, new GenreDTO("Hiphop"), new ArtistDTO("ArtistName3"),new DateTime()),
+                new SongDTO("Song4", "SongImage4", 100, new GenreDTO("Hiphop"), new ArtistDTO("ArtistName1"),new DateTime()),
             };
 
             //Arrange
@@ -71,6 +71,8 @@ namespace UnitTest
 
             //Assert
             Assert.NotNull(songs);
+
+            // hier geen foreach gebruiken
             foreach (Song song in songs)
             {
                 Assert.Equal(song.genre.name, genre.name);
@@ -96,18 +98,18 @@ namespace UnitTest
         public void GetSongsFromFavoriteListShouldReurnListOfSongInThatFavoriteList()
         {
             List<SongDTO> songDtos = new List<SongDTO>(){
-                new SongDTO("Song1", "SongImage1", 100, new GenreDTO("Hiphop"), new ArtistDTO("ArtistName1")),
-                new SongDTO("Song2", "SongImage2", 100, new GenreDTO("Rap"), new ArtistDTO("ArtistName2")),
-                new SongDTO("Song3", "SongImage3", 100, new GenreDTO("Dance"), new ArtistDTO("ArtistName3")),
-                new SongDTO("Song4", "SongImage4", 100, new GenreDTO("Hiphop"), new ArtistDTO("ArtistName1")),
-                new SongDTO("Song5", "SongImage5", 100, new GenreDTO("Hiphop"), new ArtistDTO("ArtistName1")),
+                new SongDTO("Song1", "SongImage1", 100, new GenreDTO("Hiphop"), new ArtistDTO("ArtistName1"),new DateTime()),
+                new SongDTO("Song2", "SongImage2", 100, new GenreDTO("Rap"), new ArtistDTO("ArtistName2"), new DateTime()),
+                new SongDTO("Song3", "SongImage3", 100, new GenreDTO("Dance"), new ArtistDTO("ArtistName3"), new DateTime()),
+                new SongDTO("Song4", "SongImage4", 100, new GenreDTO("Hiphop"), new ArtistDTO("ArtistName1"), new DateTime()),
+                new SongDTO("Song5", "SongImage5", 100, new GenreDTO("Hiphop"), new ArtistDTO("ArtistName1"), new DateTime()),
             };
 
             List<Song> songs = new List<Song>(){
-                new Song("Song1", "SongImage1", 100, new Genre("Hiphop"), new Artist("ArtistName1")),
-                new Song("Song2", "SongImage2", 100, new Genre("Rap"), new Artist("ArtistName2")),
-                new Song("Song3", "SongImage3", 100, new Genre("Dance"), new Artist("ArtistName3")),
-                new Song("Song4", "SongImage4", 100, new Genre("Hiphop"), new Artist("ArtistName1")),
+                new Song("Song1", "SongImage1", 100, new Genre("Hiphop"), new Artist("ArtistName1"), new DateTime()),
+                new Song("Song2", "SongImage2", 100, new Genre("Rap"), new Artist("ArtistName2"), new DateTime()),
+                new Song("Song3", "SongImage3", 100, new Genre("Dance"), new Artist("ArtistName3"), new DateTime()),
+                new Song("Song4", "SongImage4", 100, new Genre("Hiphop"), new Artist("ArtistName1"), new DateTime()),
             };
 
             //Arrange

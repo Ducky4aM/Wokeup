@@ -1,4 +1,5 @@
-﻿using Domain.Helper;
+﻿using Domain.CustomException;
+using Domain.Helper;
 using Domain.Interface;
 using Domain.Service;
 using Infrastructure;
@@ -19,44 +20,42 @@ namespace Domain
         public string password { get; private set; }
 
         private List<IFavoriteList> favoriteLists = new List<IFavoriteList>();
-        
-        private List<Genre> preferGenres = new List<Genre>();
+
+        private Genre preferGenre;
 
         public User(string name, string password)
         {
-            if (this.NameValidator(name, new NullWhiteSpaceValidator()) == false)
+            this.name = name;
+            this.password = password;
+        }
+
+        //this contructor using when create a nieuw user
+        public User(string name, string password, IStringValidator validator)
+        {
+            if (validator.Validate(name) == false)
             {
-                throw new Exception("User name is not Valid");
+                throw new InvalidNameException("User name is not Valid");
             }
 
             this.name = name.Trim();
 
-            if (this.PasswordValidator(password, new NullWhiteSpaceValidator()) == false)
+            if (validator.Validate(password) == false)
             {
-                throw new Exception("Invalid Password");
+                throw new ArgumentException("Invalid Password");
             }
+
             this.password = password;
         }
 
         public User(string name, Genre genre)
         {
-            if (this.NameValidator(name, new NullWhiteSpaceValidator()) == false)
-            {
-                throw new Exception("User name is not Valid");
-            }
-
-            this.name = name.Trim();
-            this.preferGenres.Add(genre);
+            this.name = name;
+            this.preferGenre = genre;
         }
 
         public User(string name)
         {
-            if (this.NameValidator(name, new NullWhiteSpaceValidator()) == false)
-            {
-                throw new Exception("User name is not Valid");
-            }
-
-            this.name = name.Trim();
+            this.name = name;
         }
 
         public bool RemoveFavoriteList(IFavoriteList favoriteList)
@@ -73,7 +72,7 @@ namespace Domain
 
         public bool AddFavoriteList(IFavoriteList favorite_list)
         {
-            if (this.favoriteLists.Any(item => item.name == favorite_list. name) == true)
+            if (this.favoriteLists.Any(item => item.name == favorite_list.name) == true)
             {
                 return false;
             }
@@ -88,31 +87,25 @@ namespace Domain
             return this.favoriteLists.AsReadOnly();
         }
 
-        private bool NameValidator(string name, IStringValidator validator)
-        {
-            return validator.Validate(name);
-        }
-
         private bool PasswordValidator(string password, IStringValidator validator)
         {
             return validator.Validate(password);
         }
 
-        public bool AddPreferGenre(Genre genre)
+        public bool SetPreferGenre(Genre genre)
         {
-            if (this.preferGenres.Any(item => item.name == genre.name) == true)
+            if (genre == null)
             {
-                return false;
+                throw new ArgumentException("Can't add prefer genre, genre is null!");
             }
 
-            this.preferGenres.Add(genre);
-
+            this.preferGenre = genre;
             return true;
         }
 
-        public IReadOnlyList<Genre> GetPreferGenres()
+        public Genre? GetPreferGenre()
         {
-            return this.preferGenres.AsReadOnly();
+            return this.preferGenre;
         }
     }
 }

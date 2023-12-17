@@ -53,14 +53,19 @@ namespace UnitTest.Mock
             return this.favoriteLists;
         }
 
-        public IReadOnlyList<Genre> GetPreferGenres()
+        public bool RemoveFavoriteList(IFavoriteList favoriteList)
+        {
+            return isValid;
+        }
+
+        public Genre GetPreferGenre()
         {
             throw new NotImplementedException();
         }
 
-        public bool RemoveFavoriteList(IFavoriteList favoriteList)
+        public bool SetPreferGenre(Genre genre)
         {
-            return isValid;
+            throw new NotImplementedException();
         }
     }
 }

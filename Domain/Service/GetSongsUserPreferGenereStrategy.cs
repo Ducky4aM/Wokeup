@@ -15,9 +15,17 @@ namespace Domain.Service
     {
         public IReadOnlyList<Song> GetSongs(IUser user ,List<Song> songs)
         {
-           songs.Sort(new SortSongsSuggest(user.GetPreferGenres().ToList()));
+            List<Genre> genres = new List<Genre>() { user.GetPreferGenre() };
 
-           return songs.AsReadOnly();
+            List<IComparer<Song>> test = new List<IComparer<Song>>() {
+                new SongGenreComparer(genres),
+                new SongListenedComparer()
+            };
+
+            SongSortingManager sortingManager = new SongSortingManager(test);
+            songs.Sort(sortingManager);
+
+            return songs.AsReadOnly();
         }
     }
 }

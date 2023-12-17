@@ -13,22 +13,12 @@ namespace Domain
 
         public Genre(string name)
         {
-            if (this.nameValidator(name, new NullWhiteSpaceValidator()) == false)
-            {
-                throw new Exception("Genre name not valid");
-            }
-
-            this.name = name.Trim();
+            this.name = name;
         }
 
         public override string ToString()
         {
             return this.name;
-        }
-
-        private bool nameValidator(string name, IStringValidator validator)
-        {
-            return validator.Validate(name);
         }
     }
 }

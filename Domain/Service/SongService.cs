@@ -11,7 +11,7 @@ using Domain.Interface;
 
 namespace Domain.Service
 {
-    public class SongService
+    public class SongService : ISongService
     {
         private ISongRepository songRepository;
 
@@ -28,11 +28,12 @@ namespace Domain.Service
             foreach (SongDTO songDto in listSongsDto)
             {
                 Song song = new Song(
-                    songDto.songName, 
-                    songDto.songImage, 
-                    songDto.songListened, 
+                    songDto.songName,
+                    songDto.songImage,
+                    songDto.songListened,
                     new Genre(songDto.genreDto.name),
-                    new Artist(songDto.artistDto.name)
+                    new Artist(songDto.artistDto.name),
+                    songDto.releaseAt
                     );
 
                 songs.Add(song);
@@ -54,7 +55,8 @@ namespace Domain.Service
                          songDto.songImage,
                          songDto.songListened,
                          new Genre(songDto.genreDto.name),
-                         new Artist(songDto.artistDto.name)
+                         new Artist(songDto.artistDto.name),
+                         songDto.releaseAt
                          )
                      );
 
@@ -85,8 +87,9 @@ namespace Domain.Service
                     songDto.songImage,
                     songDto.songListened,
                     new Genre(songDto.genreDto.name),
-                    new Artist(songDto.artistDto.name))
-                    );
+                    new Artist(songDto.artistDto.name),
+                    songDto.releaseAt
+                  ));
             }
 
 

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Service.Interface;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,13 +7,13 @@ using System.Threading.Tasks;
 
 namespace Domain.Service.Sort
 {
-    internal class SortSongsSuggest : IComparer<Song>
+    public class SongGenreComparer : IComparer<Song>
     {
-        List<Genre> genres;
+        private readonly List<Genre> genres;
 
-        public SortSongsSuggest(List<Genre> genres) 
+        public SongGenreComparer(List<Genre> genres)
         {
-            this.genres = genres; 
+            this.genres = genres;
         }
 
         public int Compare(Song? x, Song? y)

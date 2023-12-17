@@ -1,4 +1,5 @@
-﻿using Domain.Interface;
+﻿using Domain.Helper;
+using Domain.Interface;
 using Infrastructure;
 using Infrastructure.DTO;
 using Infrastructure.Interface;
@@ -16,7 +17,6 @@ namespace Domain.Service
         private readonly IFavoriteRepository favoriteListRepository;
         private readonly IUser user;
 
-        //hier kunnen IUser kunnen aangeven
         public FavoriteListService(IUser user, IFavoriteRepository favoriteRepository)
         {
             this.user = user;
@@ -25,7 +25,7 @@ namespace Domain.Service
 
         public ServiceStatusResult CreateFavoriteList(string name)
         {
-            bool isAddedSucces = this.user.AddFavoriteList(new FavoriteList(name));
+            bool isAddedSucces = this.user.AddFavoriteList(new FavoriteList(name, new NullWhiteSpaceValidator()));
 
             if (isAddedSucces == false)
             {

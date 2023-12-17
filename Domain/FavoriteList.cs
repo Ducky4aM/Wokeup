@@ -1,4 +1,5 @@
-﻿using Domain.Helper;
+﻿using Domain.CustomException;
+using Domain.Helper;
 using Domain.Interface;
 using Domain.Service;
 using Infrastructure;
@@ -17,9 +18,19 @@ namespace Domain
 
         private List<Song> songs = new List<Song>();
 
+        public FavoriteList(string name, IStringValidator validator)
+        {
+            if (validator.Validate(name) == false)
+            {
+                throw new InvalidNameException("Invalid favorite list name");
+            }
+
+            this.name = name;
+        }
+
         public FavoriteList(string name)
         {
-            this.name = this.GetValidName(name, new NullWhiteSpaceValidator());
+            this.name = name;
         }
 
         public IReadOnlyList<Song> GetSongs()
@@ -54,16 +65,6 @@ namespace Domain
         public override string ToString()
         {
             return this.name;
-        }
-
-        private string GetValidName(string name, IStringValidator validator)
-        {
-            if (validator.Validate(name) == false)
-            {
-                throw new Exception("Favorite list name not valid");
-            }
-
-            return name.Trim();
         }
     }
 }

@@ -11,18 +11,21 @@ namespace Domain.Factory
 {
     public static class GetSuggestSongsFactory
     {
-        public static IGetSongsStrategy GetStrategy(IUser user, UserService userService)
+        public static IGetSongsStrategy GetStrategy(IUser user, IUserService userService)
         {
             IGetSongsStrategy strategy = new GetMostListenedSongs();
 
-            if (user.GetPreferGenres().Count > 0 && userService.IsUserHaveSongInFavoriteList() == false)
+            if (user.GetPreferGenre() != null)
             {
-                strategy = new GetSongsUserPreferGenereStratergy();
-            }
+                if (userService.IsUserHaveSongInFavoriteList() == false)
+                {
+                    strategy = new GetSongsUserPreferGenereStratergy();
+                }
 
-            if (user.GetPreferGenres().Count >= 0 && userService.IsUserHaveSongInFavoriteList() == true)
-            {
-                strategy = new GetSongsSuggestToUser(userService);
+                if (userService.IsUserHaveSongInFavoriteList() == true)
+                {
+                    strategy = new GetSongsSuggestToUser(userService);
+                }
             }
 
             return strategy;

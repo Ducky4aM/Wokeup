@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Service.Sort
 {
-    public class SortSongsListened : IComparer<Song>
+    public class SongListenedComparer : IComparer<Song>
     {
         public int Compare(Song? x, Song? y)
         {

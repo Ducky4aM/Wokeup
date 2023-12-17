@@ -13,7 +13,7 @@ namespace Domain.Service
     {
         public IReadOnlyList<Song> GetSongs(IUser user, List<Song> songs)
         {
-            songs.Sort(new SortSongsListened());
+            songs.Sort(new SongListenedComparer());
 
             return songs.AsReadOnly();
         }

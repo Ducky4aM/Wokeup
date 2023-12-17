@@ -19,18 +19,16 @@ namespace Domain
 
         public Artist artist { get; private set; }
 
-        public Song(string name, string image, int listened, Genre genre, Artist artist)
-        {
-            if (this.nameValidator(name, new NullWhiteSpaceValidator()) == false)
-            {
-                throw new Exception("Song name not valid");
-            }
+        public DateTime releaseAt { get; private set; }
 
-            this.name = name.Trim();
+        public Song(string name, string image, int listened, Genre genre, Artist artist, DateTime releaseAt)
+        {
+            this.name = name;
             this.image = image;
             this.listened = listened;
             this.genre = genre;
             this.artist = artist;
+            this.releaseAt = releaseAt;
         }
 
         public Song(string name)
@@ -41,11 +39,6 @@ namespace Domain
         public override string ToString()
         {
             return this.name;
-        }
-
-        private bool nameValidator(string name, IStringValidator validator)
-        {
-            return validator.Validate(name);
         }
     }
 }

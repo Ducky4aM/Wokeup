@@ -1,5 +1,6 @@
 ﻿using Domain;
 using Domain.Service;
+using Domain.Service.Interface;
 using Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -46,7 +47,7 @@ namespace Wokeup
 
         private void btnConfirmSelectedFavortieGenre_Click(object sender, EventArgs e)
         {
-            UserService userService = new UserService(this.user);
+            IUserService userService = new UserService(this.user, new UserRepository());
 
             if (cmbSelectedPreferGenre.SelectedItem is Genre selectedGenre)
             {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Helper
 {
-    interface IStringValidator
+    public interface IStringValidator
     {
         bool Validate(string validateValue);
     }

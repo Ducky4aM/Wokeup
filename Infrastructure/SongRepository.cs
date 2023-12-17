@@ -17,7 +17,7 @@ namespace Infrastructure
                 INNER JOIN genre 
                 INNER JOIN artist as art 
                 ON so.genre = genre.genreid 
-                AND so.artistid = art.artistid";
+                AND so.artistid = art.artistid ORDER BY songid ASC";
 
                 List<SongDTO> listSongs = new List<SongDTO>();
 
@@ -32,7 +32,8 @@ namespace Infrastructure
                                 reader.GetString(reader.GetOrdinal("songimage")),
                                 reader.GetInt32(reader.GetOrdinal("songlistened")),
                                 new GenreDTO(reader.GetString(reader.GetOrdinal("genrename"))),
-                                new ArtistDTO(reader.GetString(reader.GetOrdinal("artistname")))
+                                new ArtistDTO(reader.GetString(reader.GetOrdinal("artistname"))),
+                                reader.GetDateTime(reader.GetOrdinal("releaseat"))
                             )
                         );
                     }
@@ -74,7 +75,8 @@ namespace Infrastructure
                                     reader.GetString(reader.GetOrdinal("songimage")),
                                     reader.GetInt32(reader.GetOrdinal("songlistened")),
                                     new GenreDTO(reader.GetString(reader.GetOrdinal("genrename"))),
-                                    new ArtistDTO(reader.GetString(reader.GetOrdinal("artistname")))
+                                    new ArtistDTO(reader.GetString(reader.GetOrdinal("artistname"))),
+                                    reader.GetDateTime(reader.GetOrdinal("releaseat"))
                                 )
                             );
                         }
@@ -114,7 +116,8 @@ namespace Infrastructure
                                     reader.GetString(reader.GetOrdinal("songimage")),
                                     reader.GetInt32(reader.GetOrdinal("songlistened")),
                                     new GenreDTO(reader.GetString(reader.GetOrdinal("genrename"))),
-                                    new ArtistDTO(reader.GetString(reader.GetOrdinal("artistname")))
+                                    new ArtistDTO(reader.GetString(reader.GetOrdinal("artistname"))),
+                                    reader.GetDateTime(reader.GetOrdinal("releaseat"))
                                 )
                             );
                         }
