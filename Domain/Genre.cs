@@ -1,4 +1,4 @@
-﻿using Domain.Helper;
+﻿using Domain.CustomException;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +13,11 @@ namespace Domain
 
         public Genre(string name)
         {
+            if (string.IsNullOrEmpty(name) == true)
+            {
+                throw new InvalidNameException("Genre name can't be null");    
+            }
+
             this.name = name;
         }
 

@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Domain.Service.Interface;
 using Infrastructure.Interface;
 using Domain.Interface;
+using Domain.Service.Sort;
 
 namespace Domain.Service
 {
@@ -17,6 +18,11 @@ namespace Domain.Service
 
         public SongService(ISongRepository songRepository)
         {
+            if (songRepository == null)
+            {
+                throw new ArgumentException("SongRepository is null");
+            }
+
             this.songRepository = songRepository;
         }
 
@@ -92,6 +98,7 @@ namespace Domain.Service
                   ));
             }
 
+            songs.Sort(new SongListenedComparer());
 
             return songs.AsReadOnly();
         }

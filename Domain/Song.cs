@@ -1,4 +1,4 @@
-﻿using Domain.Helper;
+﻿using Domain.CustomException;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,6 +33,11 @@ namespace Domain
 
         public Song(string name)
         {
+            if (string.IsNullOrEmpty(name) == true)
+            {
+                throw new InvalidNameException("Song name can't be null or empty");
+            }
+
             this.name = name;
         }
 

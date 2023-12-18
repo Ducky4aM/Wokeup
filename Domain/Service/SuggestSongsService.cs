@@ -9,21 +9,21 @@ using System.Threading.Tasks;
 
 namespace Domain.Service
 {
-    public class SuggestSongs
+    public class SuggestSongsService
     {
         private List<Song> songs = new List<Song>();
 
         private ISongService songService;
 
-        public SuggestSongs(ISongService songService) 
+        public SuggestSongsService(ISongService songService) 
         { 
             this.songService = songService;
             songs = songService.GetAllSongs().ToList();
         }
 
-        public IReadOnlyList<Song> GetSuggestSongs(IUser user, IGetSongsStrategy SongsStrategy)
+        public IReadOnlyList<Song> GetSuggestSongs(IUser user, IGetSongsStrategy getSongsStrategy)
         {
-            return SongsStrategy.GetSongs(user, songs);
+            return getSongsStrategy.GetSongs(user, songs);
         }
     }
 }

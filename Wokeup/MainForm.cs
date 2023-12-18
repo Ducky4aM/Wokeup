@@ -16,6 +16,7 @@ using Domain.Service;
 using Domain.Service.Interface;
 using Domain.Factory;
 using Domain.Interface;
+using Infrastructure.Interface;
 
 namespace Wokeup
 {
@@ -23,9 +24,9 @@ namespace Wokeup
     {
         private ISongService songService;
         private FavoriteListService favoriteListService;
-        private User user;
+        private IUser user;
 
-        public MainForm(User user)
+        public MainForm(IUser user)
         {
             InitializeComponent();
             this.user = user;
@@ -38,10 +39,16 @@ namespace Wokeup
         {
             LoadFavoritelistToListBox();
             LoadGenreToComboBox(cmbFilterSong);
+            LoadSuggestSongs();
+        }
 
-            SuggestSongs suggestSongs = new SuggestSongs(songService);
+        private void LoadSuggestSongs()
+        {
+            SuggestSongsService suggestSongsService = new SuggestSongsService(songService);
+            UserService userService = new UserService(user, new UserRepository());
+            GetSuggestSongsFactory getSuggestSongsFactory = new GetSuggestSongsFactory(user, userService);
+            IReadOnlyList<Song> songs = suggestSongsService.GetSuggestSongs(this.user, getSuggestSongsFactory.GetStrategy());
 
-            IReadOnlyList<Song> songs = suggestSongs.GetSuggestSongs(this.user, GetSuggestSongsFactory.GetStrategy(this.user, new UserService(user)));
             LoadMainSongTable(songs);
         }
 
@@ -242,9 +249,13 @@ namespace Wokeup
             {
                 if (cmbFilterSong.SelectedItem is Genre selectedGenre)
                 {
-                    //LoadMainSongTable(this.songService.GetSongsBaseOnGenre(selectedGenre));
+                    LoadMainSongTable(this.songService.GetSongsBaseOnGenre(selectedGenre));
                 }
+
+                return;
             }
+
+            LoadSuggestSongs();
         }
     }
 }

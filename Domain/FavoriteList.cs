@@ -1,5 +1,4 @@
 ﻿using Domain.CustomException;
-using Domain.Helper;
 using Domain.Interface;
 using Domain.Service;
 using Infrastructure;
@@ -18,18 +17,13 @@ namespace Domain
 
         private List<Song> songs = new List<Song>();
 
-        public FavoriteList(string name, IStringValidator validator)
-        {
-            if (validator.Validate(name) == false)
-            {
-                throw new InvalidNameException("Invalid favorite list name");
-            }
-
-            this.name = name;
-        }
-
         public FavoriteList(string name)
         {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                throw new InvalidNameException("favorite list name can't be null or empty.");
+            }
+
             this.name = name;
         }
 
@@ -40,6 +34,11 @@ namespace Domain
 
         public bool AddSongToFavoriteList(Song song)
         {
+            if (song == null)
+            {
+                throw new ArgumentException("Song add into favorite list can't be null");
+            }
+
             if (this.songs.Any(songCheck => songCheck.name == song.name))
             {
                 return false;
@@ -52,6 +51,11 @@ namespace Domain
 
         public bool RemoveSongInFavoriteList(Song song)
         {
+            if (song == null)
+            {
+                throw new ArgumentException("Song remove in favorite list can't be null");
+            }
+
             if (this.songs.Contains(song) == false)
             {
                 return false;

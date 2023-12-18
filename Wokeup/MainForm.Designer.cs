@@ -111,14 +111,14 @@
             dataGridView1.Location = new Point(373, 109);
             dataGridView1.Name = "dataGridView1";
             dataGridView1.RowTemplate.Height = 25;
-            dataGridView1.Size = new Size(509, 85);
+            dataGridView1.Size = new Size(513, 85);
             dataGridView1.TabIndex = 7;
             // 
             // cmbFilterSong
             // 
             cmbFilterSong.DropDownStyle = ComboBoxStyle.DropDownList;
             cmbFilterSong.FormattingEnabled = true;
-            cmbFilterSong.Items.AddRange(new object[] { "Most listened" });
+            cmbFilterSong.Items.AddRange(new object[] { "All" });
             cmbFilterSong.Location = new Point(6, 6);
             cmbFilterSong.Name = "cmbFilterSong";
             cmbFilterSong.Size = new Size(132, 23);
@@ -235,7 +235,7 @@
             tbpFavoriteList.Location = new Point(4, 24);
             tbpFavoriteList.Name = "tbpFavoriteList";
             tbpFavoriteList.Padding = new Padding(3);
-            tbpFavoriteList.Size = new Size(1200, 485);
+            tbpFavoriteList.Size = new Size(1200, 527);
             tbpFavoriteList.TabIndex = 1;
             tbpFavoriteList.Text = "My favorite";
             tbpFavoriteList.UseVisualStyleBackColor = true;

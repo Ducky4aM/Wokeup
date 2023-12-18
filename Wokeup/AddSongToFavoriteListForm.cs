@@ -19,7 +19,7 @@ namespace Wokeup
         IUser user;
         Song selectedSong;
         Bitmap songImage;
-        public AddSongToFavoriteListForm(User user, Song selectedSong, Bitmap songImage)
+        public AddSongToFavoriteListForm(IUser user, Song selectedSong, Bitmap songImage)
         {
             InitializeComponent();
 

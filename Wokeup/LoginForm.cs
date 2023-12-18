@@ -1,5 +1,5 @@
 using Domain;
-using Domain.Helper;
+using Domain.Interface;
 using Domain.Service;
 using Domain.Service.Auth;
 using Infrastructure;
@@ -15,7 +15,7 @@ namespace Wokeup
             InitializeComponent();
         }
 
-        private void OpenMainForm(User user)
+        private void OpenMainForm(IUser user)
         {
             this.Hide();
             MainForm mainForm = new MainForm(user);
@@ -24,7 +24,7 @@ namespace Wokeup
             mainForm.Focus();
         }
 
-        private void OpenSelectedPreferGenreForm(User user)
+        private void OpenSelectedPreferGenreForm(IUser user)
         {
             this.Hide();
             frmSelectedFavoriteGenre frm = new frmSelectedFavoriteGenre(user);
@@ -57,7 +57,7 @@ namespace Wokeup
                 return;
             }
 
-            User inlogedUser = authenicationResult.AuthenticatedUser;
+            IUser inlogedUser = authenicationResult.AuthenticatedUser;
             MessageBox.Show($"Welcome {inlogedUser.name}", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
             // if user nor choose a prefer genre yet, ask or user want to select a prefer gerne (optional)

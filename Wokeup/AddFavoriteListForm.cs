@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Domain.Interface;
 using Domain.Service;
 using Infrastructure;
 using System;
@@ -16,8 +17,8 @@ namespace Wokeup
 {
     public partial class AddFavoriteListFOrm : Form
     {
-        User user;
-        public AddFavoriteListFOrm(User user)
+        IUser user;
+        public AddFavoriteListFOrm(IUser user)
         {
             InitializeComponent();
             this.user = user;
@@ -38,7 +39,7 @@ namespace Wokeup
             }
 
             FavoriteListService favoriteListService = new FavoriteListService(this.user, new FavoriteListRepository());
-            ServiceStatusResult statusMessage = favoriteListService.CreateFavoriteList(txbAddFavoriteList.Text);
+            ServiceStatusResult statusMessage = favoriteListService.CreateFavoriteList(new FavoriteList(txbAddFavoriteList.Text));
 
             if (statusMessage.isSuccess == false)
             {

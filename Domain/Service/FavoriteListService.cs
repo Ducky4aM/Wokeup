@@ -1,5 +1,4 @@
-﻿using Domain.Helper;
-using Domain.Interface;
+﻿using Domain.Interface;
 using Infrastructure;
 using Infrastructure.DTO;
 using Infrastructure.Interface;
@@ -19,27 +18,37 @@ namespace Domain.Service
 
         public FavoriteListService(IUser user, IFavoriteRepository favoriteRepository)
         {
+            if (user == null)
+            {
+                throw new ArgumentException("User is null");
+            }
+
+            if (favoriteRepository == null)
+            {
+                throw new ArgumentException("FavoriteRepository is null");
+            }
+
             this.user = user;
             this.favoriteListRepository = favoriteRepository;
         }
 
-        public ServiceStatusResult CreateFavoriteList(string name)
+        public ServiceStatusResult CreateFavoriteList(IFavoriteList favoriteList)
         {
-            bool isAddedSucces = this.user.AddFavoriteList(new FavoriteList(name, new NullWhiteSpaceValidator()));
+            bool isAddedSucces = this.user.AddFavoriteList(new FavoriteList(favoriteList.name));
 
             if (isAddedSucces == false)
             {
-                return ServiceStatusResult.Failure("Error", $"Favorite list with name: {name} already exsit, please try other name!");
+                return ServiceStatusResult.Failure("Error", $"Favorite list with name: {favoriteList.name} already exsit, please try other name!");
             }
 
-            bool isAddedToDatabase = this.favoriteListRepository.AddNewFavoriteList(new FavoriteListDTO(name), new UserDTO(this.user.name));
+            bool isAddedToDatabase = this.favoriteListRepository.AddNewFavoriteList(new FavoriteListDTO(favoriteList.name), new UserDTO(this.user.name));
 
             if (isAddedToDatabase == false)
             {
                 return ServiceStatusResult.Failure("Error", "Can't not added favorite list in database");
             }
 
-            return ServiceStatusResult.Success("Succes", $"Created `{name}` list succesful!");
+            return ServiceStatusResult.Success("Succes", $"Created `{favoriteList.name}` list succesful!");
         }
 
         public ServiceStatusResult RemoveFavoriteList(IFavoriteList favoriteList)

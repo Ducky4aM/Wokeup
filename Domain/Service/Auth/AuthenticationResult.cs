@@ -1,4 +1,5 @@
-﻿using Domain.Service;
+﻿using Domain.Interface;
+using Domain.Service;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,7 @@ namespace Domain.Service.Auth
 {
     public class AuthenticationResult
     {
-        public User? AuthenticatedUser { get; set; }
+        public IUser? AuthenticatedUser { get; set; }
         public ServiceStatusResult? AuthenticationStatus { get; set; }
     }
 }

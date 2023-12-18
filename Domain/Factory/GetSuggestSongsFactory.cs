@@ -9,11 +9,30 @@ using System.Threading.Tasks;
 
 namespace Domain.Factory
 {
-    public static class GetSuggestSongsFactory
+    public class GetSuggestSongsFactory
     {
-        public static IGetSongsStrategy GetStrategy(IUser user, IUserService userService)
+        private IUser user;
+        private IUserService userService;
+
+        public GetSuggestSongsFactory(IUser user, IUserService userService)
         {
-            IGetSongsStrategy strategy = new GetMostListenedSongs();
+            if (user == null)
+            {
+                throw new ArgumentException("User is null");
+            }
+
+            if (userService == null)
+            {
+                throw new ArgumentException("UserService is null");
+            }
+
+            this.user = user;
+            this.userService = userService;
+        }
+
+        public IGetSongsStrategy GetStrategy()
+        {
+            IGetSongsStrategy strategy = new GetMostListenedSongsStrategy();
 
             if (user.GetPreferGenre() != null)
             {
@@ -24,7 +43,7 @@ namespace Domain.Factory
 
                 if (userService.IsUserHaveSongInFavoriteList() == true)
                 {
-                    strategy = new GetSongsSuggestToUser(userService);
+                    strategy = new GetSongsSuggestToUserStrategy(userService);
                 }
             }
 

@@ -1,5 +1,4 @@
-﻿using Domain.Helper;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +8,7 @@ namespace Domain.Interface
 {
     public interface IUser
     {
-  string name { get; }
+        string name { get; }
         string password { get; }
 
         bool AddFavoriteList(IFavoriteList favorite_list);

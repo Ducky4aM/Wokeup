@@ -2,6 +2,7 @@
 using Domain.Service;
 using Infrastructure;
 using Infrastructure.DTO;
+using Infrastructure.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,9 +13,9 @@ namespace Domain.Service.Auth
 {
     public class AuthenticationService
     {
-        private UserRepository userRepository;
+        private IUserRepository userRepository;
 
-        public AuthenticationService(UserRepository userRepository) 
+        public AuthenticationService(IUserRepository userRepository) 
         {
             this.userRepository = userRepository;
         }

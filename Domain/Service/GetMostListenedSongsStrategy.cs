@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Service
 {
-    public class GetMostListenedSongs : IGetSongsStrategy
+    public class GetMostListenedSongsStrategy : IGetSongsStrategy
     {
         public IReadOnlyList<Song> GetSongs(IUser user, List<Song> songs)
         {

@@ -1,5 +1,4 @@
 ﻿using Domain.CustomException;
-using Domain.Helper;
 using Domain.Interface;
 using Domain.Service;
 using Infrastructure;
@@ -23,25 +22,19 @@ namespace Domain
 
         private Genre preferGenre;
 
+        //this contructor using when create a nieuw user
         public User(string name, string password)
         {
-            this.name = name;
-            this.password = password;
-        }
-
-        //this contructor using when create a nieuw user
-        public User(string name, string password, IStringValidator validator)
-        {
-            if (validator.Validate(name) == false)
+            if (string.IsNullOrEmpty(name) == true)
             {
                 throw new InvalidNameException("User name is not Valid");
             }
 
             this.name = name.Trim();
 
-            if (validator.Validate(password) == false)
+            if (string.IsNullOrEmpty(password) == true)
             {
-                throw new ArgumentException("Invalid Password");
+                throw new ArgumentException("Invalid user password");
             }
 
             this.password = password;
@@ -49,17 +42,37 @@ namespace Domain
 
         public User(string name, Genre genre)
         {
+            if (string.IsNullOrEmpty(name) == true)
+            {
+                throw new InvalidNameException("User name is not Valid");
+            }
             this.name = name;
+
+            if (genre == null)
+            {
+                throw new ArgumentException("Genre is null");
+            }
+
             this.preferGenre = genre;
         }
 
         public User(string name)
         {
+            if (string.IsNullOrEmpty(name) == true)
+            {
+                throw new InvalidNameException("User name is not Valid");
+            }
+
             this.name = name;
         }
 
         public bool RemoveFavoriteList(IFavoriteList favoriteList)
         {
+            if (favoriteList == null)
+            {
+                throw new ArgumentException("Favorite list to remove is null");
+            }
+
             if (this.favoriteLists.Contains(favoriteList) == false)
             {
                 return false;
@@ -70,14 +83,19 @@ namespace Domain
             return true;
         }
 
-        public bool AddFavoriteList(IFavoriteList favorite_list)
+        public bool AddFavoriteList(IFavoriteList favoriteList)
         {
-            if (this.favoriteLists.Any(item => item.name == favorite_list.name) == true)
+            if (favoriteList == null)
+            {
+                throw new ArgumentException("Can't add null favorite list");
+            }
+
+            if (this.favoriteLists.Any(item => item.name == favoriteList.name) == true)
             {
                 return false;
             }
 
-            this.favoriteLists.Add(favorite_list);
+            this.favoriteLists.Add(favoriteList);
 
             return true;
         }
@@ -85,11 +103,6 @@ namespace Domain
         public IReadOnlyList<IFavoriteList> GetFavoriteLists()
         {
             return this.favoriteLists.AsReadOnly();
-        }
-
-        private bool PasswordValidator(string password, IStringValidator validator)
-        {
-            return validator.Validate(password);
         }
 
         public bool SetPreferGenre(Genre genre)

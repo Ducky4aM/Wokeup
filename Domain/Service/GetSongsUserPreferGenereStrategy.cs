@@ -17,12 +17,12 @@ namespace Domain.Service
         {
             List<Genre> genres = new List<Genre>() { user.GetPreferGenre() };
 
-            List<IComparer<Song>> test = new List<IComparer<Song>>() {
+            List<IComparer<Song>> comparers = new List<IComparer<Song>>() {
                 new SongGenreComparer(genres),
                 new SongListenedComparer()
             };
 
-            SongSortingManager sortingManager = new SongSortingManager(test);
+            SongSortingManager sortingManager = new SongSortingManager(comparers);
             songs.Sort(sortingManager);
 
             return songs.AsReadOnly();

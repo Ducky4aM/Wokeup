@@ -2,8 +2,8 @@
 {
     public interface IUserService
     {
-        List<Genre> getSuggestGenreForUser();
+        List<Genre> GetSuggestGenreForUser();
         bool IsUserHaveSongInFavoriteList();
-        ServiceStatusResult setUserPreferGenre(Genre genre);
+        ServiceStatusResult SetUserPreferGenre(Genre genre);
     }
 }

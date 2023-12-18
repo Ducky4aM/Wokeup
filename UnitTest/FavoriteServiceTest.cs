@@ -25,9 +25,10 @@ namespace UnitTest
             IUser userMock = new UserMock(false);
             IFavoriteRepository favoriteRepositoryMock = new FavoriteListRepositoryMock(true);
             FavoriteListService favoriteListService = new FavoriteListService(userMock, favoriteRepositoryMock);
+            IFavoriteList favoriteList = new FavoriteList(favoriteListName);
 
             //Act
-            ServiceStatusResult serviceStatus = favoriteListService.CreateFavoriteList(favoriteListName);
+            ServiceStatusResult serviceStatus = favoriteListService.CreateFavoriteList(favoriteList);
             bool isAdded = userMock.AddFavoriteList(new FavoriteList(favoriteListName));
 
             //Assert
@@ -44,9 +45,10 @@ namespace UnitTest
             IUser userMock = new UserMock(true);
             IFavoriteRepository favoriteRepositoryMock = new FavoriteListRepositoryMock(false);
             FavoriteListService favoriteListService = new FavoriteListService(userMock, favoriteRepositoryMock);
+            IFavoriteList favoriteList = new FavoriteList(favoriteListName);
 
             //Act
-            ServiceStatusResult serviceStatus = favoriteListService.CreateFavoriteList(favoriteListName);
+            ServiceStatusResult serviceStatus = favoriteListService.CreateFavoriteList(favoriteList);
 
            //Assert
             Assert.Equal ("Error", serviceStatus.messageTitle);
@@ -60,9 +62,10 @@ namespace UnitTest
             IUser userMock = new UserMock("duc", true);
             IFavoriteRepository favoriteRepositoryMock = new FavoriteListRepositoryMock(true);
             FavoriteListService favoriteListService = new FavoriteListService(userMock, favoriteRepositoryMock);
+            IFavoriteList favoriteList = new FavoriteList(favoriteListName);
 
             //Act
-            ServiceStatusResult serviceStatus = favoriteListService.CreateFavoriteList(favoriteListName);
+            ServiceStatusResult serviceStatus = favoriteListService.CreateFavoriteList(favoriteList);
 
             //Assert
             Assert.True(serviceStatus.isSuccess);

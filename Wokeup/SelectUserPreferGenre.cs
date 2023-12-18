@@ -1,4 +1,5 @@
 ﻿using Domain;
+using Domain.Interface;
 using Domain.Service;
 using Domain.Service.Interface;
 using Infrastructure;
@@ -16,9 +17,9 @@ namespace Wokeup
 {
     public partial class frmSelectedFavoriteGenre : Form
     {
-        User user;
+        IUser user;
 
-        public frmSelectedFavoriteGenre(User user)
+        public frmSelectedFavoriteGenre(IUser user)
         {
             InitializeComponent();
             this.user = user;
@@ -51,7 +52,7 @@ namespace Wokeup
 
             if (cmbSelectedPreferGenre.SelectedItem is Genre selectedGenre)
             {
-               ServiceStatusResult result = userService.setUserPreferGenre(selectedGenre);
+               ServiceStatusResult result = userService.SetUserPreferGenre(selectedGenre);
 
                 if (result.isSuccess == false)
                 {

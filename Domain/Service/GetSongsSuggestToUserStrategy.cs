@@ -9,26 +9,26 @@ using System.Threading.Tasks;
 
 namespace Domain.Service
 {
-    public class GetSongsSuggestToUser : IGetSongsStrategy
+    public class GetSongsSuggestToUserStrategy : IGetSongsStrategy
     {
         private IUserService userService;
 
-        public GetSongsSuggestToUser(IUserService userService)
+        public GetSongsSuggestToUserStrategy(IUserService userService)
         {
             this.userService = userService;
         }
 
         public IReadOnlyList<Song> GetSongs(IUser user, List<Song> songs)
         {
-            List<Genre> genres = this.userService.getSuggestGenreForUser();
+            List<Genre> genres = this.userService.GetSuggestGenreForUser();
 
-            List<IComparer<Song>> test = new List<IComparer<Song>>() {
+            List<IComparer<Song>> comparers = new List<IComparer<Song>>() {
                 new SongGenreComparer(genres),
                 new SongReleaseDateComparer(),
                 new SongListenedComparer(),
             };
 
-            SongSortingManager sortingManager = new SongSortingManager(test);
+            SongSortingManager sortingManager = new SongSortingManager(comparers);
 
             songs.Sort(sortingManager);
             return songs.AsReadOnly();

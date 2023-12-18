@@ -1,5 +1,6 @@
 ﻿using Infrastructure;
 using Infrastructure.DTO;
+using Infrastructure.Interface;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,12 +11,17 @@ namespace Domain.Service
 {
     public class GenreService
     {
-        private GenreRepository genreRepository;
+        private IGenreRepository genreRepository;
 
-        public GenreService(GenreRepository genreRepository)
-        {
-           this.genreRepository = genreRepository;
-        }
+       public GenreService(IGenreRepository genreRepository)
+       {
+            if (genreRepository == null)
+            {
+                throw new ArgumentNullException("Genre repository is null");
+            }
+
+            this.genreRepository = genreRepository;
+       }
 
         public IReadOnlyList<Genre> GetAllGenre()
         {
