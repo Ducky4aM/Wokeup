@@ -16,13 +16,34 @@ namespace Domain.Service
         private ISongService songService;
 
         public SuggestSongsService(ISongService songService) 
-        { 
+        {
+            if (songService == null)
+            {
+                throw new ArgumentException("songService is null");
+            }
+
             this.songService = songService;
-            songs = songService.GetAllSongs().ToList();
         }
 
-        public IReadOnlyList<Song> GetSuggestSongs(IUser user, IGetSongsStrategy getSongsStrategy)
+        public IReadOnlyList<Song>GetSuggestSongs(IUser user, IGetSongsStrategy getSongsStrategy)
         {
+            if (user == null)
+            {
+                throw new ArgumentException("Argument user is null");
+            }
+
+            if (getSongsStrategy == null)
+            {
+                throw new ArgumentException("Argument getSongsStrategy is null");
+            }
+
+            songs = songService.GetAllSongs().ToList();
+
+            if (songs.Count() == 0)
+            {
+                throw new NullReferenceException("There is no song for suggestion");
+            }
+
             return getSongsStrategy.GetSongs(user, songs);
         }
     }

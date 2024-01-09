@@ -45,7 +45,7 @@ namespace Domain.Service
 
             if (isAdded == false)
             {
-                return ServiceStatusResult.Failure();
+                return ServiceStatusResult.Failure("Error", "Can't added prefer genre");
             }
 
             bool isAddedInDatabase = userRepository.SetUserPreferGenre(new UserDTO(this.user.name), new GenreDTO(genre.name));
@@ -80,17 +80,28 @@ namespace Domain.Service
 
         public List<Genre> GetSuggestGenreForUser()
         {
-            List<Genre> genres = new List<Genre>() {
-                user.GetPreferGenre()
-            };
+            //hier uitbreiden met exception. of andere screnario.
+            List<Genre> genres = new List<Genre>();
+
+            if (user.GetPreferGenre() != null)
+            {
+                genres.Add(user.GetPreferGenre());
+            }
 
             Dictionary<string, int> genreCounts = new Dictionary<string, int>();
-
             List<Song> allSong = new List<Song>();
 
-            foreach (IFavoriteList favoriteList in user.GetFavoriteLists().ToList())
+            //get all favorite list of user
+            IReadOnlyList<IFavoriteList> userFavoriteLists = user.GetFavoriteLists();
+
+            if (userFavoriteLists == null)
             {
-                foreach (Song song in favoriteList.GetSongs().ToList())
+                throw new NullReferenceException("userFavoriteLists is null");
+            }
+
+            foreach (IFavoriteList favoriteList in userFavoriteLists)
+            {
+                foreach (Song song in favoriteList.GetSongs())
                 {
                     string genreName = song.genre.name;
 
@@ -113,6 +124,7 @@ namespace Domain.Service
                 genres.Insert(0, new Genre(genreName));
             }
 
+            //get unique genre
             genres = genres.DistinctBy(g => g.name).ToList();
 
             return genres ;

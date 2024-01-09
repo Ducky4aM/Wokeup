@@ -14,6 +14,37 @@ namespace Infrastructure
     {
         private DbConnect dbConnect = new DbConnect();
 
+        public IReadOnlyList<ArtistDTO> GetAllArtistBaseOnGenre(GenreDTO genreDto)
+        {
+            List<ArtistDTO> artistDtos = new List<ArtistDTO>();
+
+            try
+            {
+                string querry = "SELECT * FROM artist AS a JOIN artistgenre AS ag ON a.artistid = ag.artistid JOIN genre AS g ON g.genreid = ag.genreid WHERE g.genreid = (SELECT genreid FROM genre WHERE genre.genrename = @genreName)";
+
+                using (MySqlCommand cmd = dbConnect.ExecuteCommand(querry))
+                {
+                    cmd.Parameters.AddWithValue("@genreName", genreDto.name);
+                    using (MySqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            artistDtos.Add(
+                                new ArtistDTO(reader.GetString(reader.GetOrdinal("artistName")))
+                            );
+                        }
+
+                        return artistDtos.AsReadOnly();
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                return artistDtos.AsReadOnly();
+            }
+        }
+
         public IReadOnlyList<GenreDTO> GetAllGenre()
         {
             List<GenreDTO> genreList = new List<GenreDTO>();

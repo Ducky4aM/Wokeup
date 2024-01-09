@@ -9,42 +9,21 @@ using System.Threading.Tasks;
 
 namespace Domain.Factory
 {
-    public class GetSuggestSongsFactory
+    public static class GetSuggestSongsFactory
     {
-        private IUser user;
-        private IUserService userService;
-
-        public GetSuggestSongsFactory(IUser user, IUserService userService)
-        {
-            if (user == null)
-            {
-                throw new ArgumentException("User is null");
-            }
-
-            if (userService == null)
-            {
-                throw new ArgumentException("UserService is null");
-            }
-
-            this.user = user;
-            this.userService = userService;
-        }
-
-        public IGetSongsStrategy GetStrategy()
+        //Uservervice allen gerbuikem usere hoeven niet
+        public static IGetSongsStrategy GetStrategy(IUserService userService)
         {
             IGetSongsStrategy strategy = new GetMostListenedSongsStrategy();
 
-            if (user.GetPreferGenre() != null)
+            if (userService.IsUserHaveSongInFavoriteList() == false)
             {
-                if (userService.IsUserHaveSongInFavoriteList() == false)
-                {
-                    strategy = new GetSongsUserPreferGenereStratergy();
-                }
+                strategy = new GetSongsUserPreferGenereStratergy();
+            }
 
-                if (userService.IsUserHaveSongInFavoriteList() == true)
-                {
-                    strategy = new GetSongsSuggestToUserStrategy(userService);
-                }
+            if (userService.IsUserHaveSongInFavoriteList() == true)
+            {
+                strategy = new GetSongsSuggestToUserStrategy(userService);
             }
 
             return strategy;

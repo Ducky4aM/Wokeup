@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -21,7 +22,6 @@ namespace Wokeup
 
         private void btnConfirmRegister_Click(object sender, EventArgs e)
         {
-
         }
 
         private void txbConfirmPassword_TextChanged(object sender, EventArgs e)
@@ -42,6 +42,15 @@ namespace Wokeup
             lblConfirmPasswordControlText.Text = "Password Matches!";
             lblConfirmPasswordControlText.ForeColor = Color.Green;
 
+        }
+
+        private void btnLogin_Click(object sender, EventArgs e)
+        {
+            this.Hide();
+            frmLogin loginform = new frmLogin();
+            loginform.TopMost = true;
+            loginform.ShowDialog();
+            loginform.Focus();
         }
     }
 }

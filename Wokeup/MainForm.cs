@@ -17,6 +17,7 @@ using Domain.Service.Interface;
 using Domain.Factory;
 using Domain.Interface;
 using Infrastructure.Interface;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace Wokeup
 {
@@ -24,6 +25,7 @@ namespace Wokeup
     {
         private ISongService songService;
         private FavoriteListService favoriteListService;
+        private GenreService genreService;
         private IUser user;
 
         public MainForm(IUser user)
@@ -33,6 +35,7 @@ namespace Wokeup
             // hier IsongRepository , FavoriteListRepository ipv song repository
             this.songService = new SongService(new SongRepository());
             this.favoriteListService = new FavoriteListService(user, new FavoriteListRepository());
+            this.genreService = new GenreService(new GenreRepository());
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -46,10 +49,21 @@ namespace Wokeup
         {
             SuggestSongsService suggestSongsService = new SuggestSongsService(songService);
             UserService userService = new UserService(user, new UserRepository());
-            GetSuggestSongsFactory getSuggestSongsFactory = new GetSuggestSongsFactory(user, userService);
-            IReadOnlyList<Song> songs = suggestSongsService.GetSuggestSongs(this.user, getSuggestSongsFactory.GetStrategy());
+            IReadOnlyList<Song> songs = suggestSongsService.GetSuggestSongs(this.user, GetSuggestSongsFactory.GetStrategy(userService));
 
             LoadMainSongTable(songs);
+            LoadSuggestArtist(userService.GetSuggestGenreForUser()[0]);
+        }
+
+        private void LoadSuggestArtist(Genre genre)
+        {
+            IReadOnlyList<Artist> artists = genreService.GetAllArtistBaseOnGenre(genre);
+            dgvArtistSuggestion.Rows.Clear();
+
+            foreach (Artist artist in artists)
+            {
+                dgvArtistSuggestion.Rows.Add(artist.name);
+            }
         }
 
         private void LoadMainSongTable(IReadOnlyList<Song> songs)

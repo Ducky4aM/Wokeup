@@ -14,6 +14,8 @@ namespace UnitTest.Mock
 
         private readonly List<IFavoriteList> favoriteLists;
 
+        private readonly Genre preferGenre;
+
         public string name { get; set; }
 
         public UserMock()
@@ -34,6 +36,18 @@ namespace UnitTest.Mock
         public UserMock(List<IFavoriteList> favoriteLists)
         {
             this.favoriteLists = favoriteLists;
+        }
+
+        public UserMock(List<IFavoriteList> favoriteLists, Genre genre)
+        {
+            this.favoriteLists = favoriteLists;
+            this.preferGenre = genre;
+        }
+
+        public UserMock(bool isValid,Genre genre)
+        {
+            this.isValid = isValid;
+            this.preferGenre = genre;
         }
 
         public string password => throw new NotImplementedException();
@@ -60,12 +74,12 @@ namespace UnitTest.Mock
 
         public Genre GetPreferGenre()
         {
-            throw new NotImplementedException();
+            return this.preferGenre;
         }
 
         public bool SetPreferGenre(Genre genre)
         {
-            throw new NotImplementedException();
+            return this.isValid;
         }
     }
 }

@@ -23,6 +23,7 @@ namespace Domain
         private Genre preferGenre;
 
         //this contructor using when create a nieuw user
+        // hier better voor Interface gerbuiken en injecteren in alle contructor.
         public User(string name, string password)
         {
             if (string.IsNullOrEmpty(name) == true)

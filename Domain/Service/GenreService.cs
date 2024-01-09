@@ -35,5 +35,23 @@ namespace Domain.Service
 
             return genres.AsReadOnly();
         }
+
+        public IReadOnlyList<Artist> GetAllArtistBaseOnGenre(Genre genre)
+        {
+            if (genre == null)
+            {
+                throw new ArgumentException("Genre is null");
+            }
+
+            List<Artist> artists = new List<Artist>();
+            IReadOnlyList<ArtistDTO> artistDtos = genreRepository.GetAllArtistBaseOnGenre(new GenreDTO(genre.name));
+
+            foreach (ArtistDTO artistDto in artistDtos)
+            {
+                artists.Add(new Artist(artistDto.name));
+            }
+
+            return artists.AsReadOnly();
+        }
     }
 }
